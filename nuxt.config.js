@@ -53,7 +53,11 @@ module.exports = {
   /*
   ** Plugins
   */
-  plugins: ['~plugins/vuetify.js', '~plugins/firebase.js'],
+  plugins: [
+    '~plugins/vuetify.js',
+    '~plugins/firebase.js',
+    '~plugins/auth.js'
+  ],
 
   /*
   ** Stylesheets
@@ -67,7 +71,6 @@ module.exports = {
   ** Router
   */
   router: {
-    // Run the middleware/auth.js on every page
     middleware: 'auth'
   }
 }

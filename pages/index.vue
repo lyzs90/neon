@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from '../plugins/firebase'
 import Logo from '~/components/Logo.vue'
 
 export default {

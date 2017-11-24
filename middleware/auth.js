@@ -1,11 +1,6 @@
-import firebase from 'firebase'
-
-export default function ({ redirect }) {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      redirect('/')
-    } else {
-      redirect('/login')
-    }
-  })
+export default function ({ store, app }) {
+  if (store.getters.authenticated) {
+    app.router.push({ name: 'index' })
+  }
+  app.router.push({ name: 'login' })
 }

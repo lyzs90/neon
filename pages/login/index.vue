@@ -1,9 +1,9 @@
-<template lang="html">
+<template lang='html'>
   <v-container fluid fill-height>
     <v-layout flex align-center justify-center>
-      <v-flex class="text-xs-center">
-        <div id="firebaseui-auth-container"></div>
-        <div id="loader">Loading...</div>
+      <v-flex class='text-xs-center'>
+        <div id='firebaseui-auth-container'></div>
+        <div id='loader'>Loading...</div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -19,9 +19,13 @@ if (process.browser) {
 
 export default {
   name: 'login',
+
   mounted () {
     const uiConfig = {
       callbacks: {
+        'signInSuccess': function (currentUser, credential, redirectUrl) {
+          return true
+        },
         uiShown: function () {
           document.getElementById('loader').style.display = 'none'
         }
