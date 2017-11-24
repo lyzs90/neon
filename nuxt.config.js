@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { join } = require('path')
 
 module.exports = {
@@ -43,6 +42,13 @@ module.exports = {
 
     vendor: ['vuetify', 'firebase', 'firebaseui']
   },
+
+  /*
+  ** Modules
+  */
+  modules: [
+    '@nuxtjs/dotenv'
+  ],
 
   /*
   ** Plugins
