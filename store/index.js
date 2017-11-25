@@ -1,5 +1,7 @@
 import Vuex from 'vuex'
 
+import getters from './getters'
+import actions from './actions'
 import mutations from './mutations'
 
 const store = () => {
@@ -8,14 +10,9 @@ const store = () => {
       user: {},
       authenticated: false
     },
-
-    mutations,
-
-    getters: {
-      authenticated: state => {
-        return !!state.user
-      }
-    }
+    getters,
+    actions,
+    mutations
   })
 }
 
