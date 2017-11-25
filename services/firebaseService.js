@@ -10,4 +10,7 @@ const config = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID
 }
 
-export default !firebase.apps.length ? firebase.initializeApp(config) : firebase.app()
+const fb = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app()
+
+export const auth = firebase.auth()
+export default fb

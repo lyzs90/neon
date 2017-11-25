@@ -55,8 +55,7 @@ module.exports = {
   */
   plugins: [
     '~plugins/vuetify.js',
-    '~plugins/firebase.js',
-    '~plugins/auth.js'
+    '~plugins/firebaseAuth.js'
   ],
 
   /*
@@ -64,13 +63,13 @@ module.exports = {
   */
   css: [
     { src: join(__dirname, 'css/app.styl'), lang: 'styl' },
-    '@/node_modules/firebaseui/dist/firebaseui.css'
+    '~/node_modules/firebaseui/dist/firebaseui.css'
   ],
 
   /*
   ** Router
   */
   router: {
-    middleware: 'auth'
+    middleware: 'routerAuth'
   }
 }

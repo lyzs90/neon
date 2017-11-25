@@ -11,6 +11,7 @@
 
 <script>
 import firebase from 'firebase'
+import { auth } from '~/services/firebaseService'
 
 // Import only on clientside, not during SSR
 if (process.browser) {
@@ -21,22 +22,21 @@ export default {
   name: 'login',
 
   mounted () {
+    // Checks if ui instance already exists
+    const existingInstance = firebaseui.auth.AuthUI.getInstance()
     const uiConfig = {
       callbacks: {
-        'signInSuccess': function (currentUser, credential, redirectUrl) {
-          return true
-        },
         uiShown: function () {
           document.getElementById('loader').style.display = 'none'
         }
       },
-      signInSuccessUrl: '/',
+      signInSuccessUrl: 'http://localhost:3000/',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       credentialHelper: firebaseui.auth.CredentialHelper.NONE
     }
-    const ui = new firebaseui.auth.AuthUI(firebase.auth())
+    const ui = existingInstance || new firebaseui.auth.AuthUI(auth)
     ui.start('#firebaseui-auth-container', uiConfig)
   }
 }

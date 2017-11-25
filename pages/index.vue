@@ -12,13 +12,18 @@
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
         <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
       </div>
-      <v-btn @click='logOut' color='primary'>Log out</v-btn>
+      <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
+      <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
+      <p>User: {{ (user && user.displayName) || 'null' }}</p>
+      <p>Authenticated: {{ authenticated }}</p>
     </div>
   </section>
 </template>
 
 <script>
-import firebase from '../plugins/firebase'
+import { mapGetters, mapState } from 'vuex'
+
+import { auth } from '~/services/firebaseService'
 import Logo from '~/components/Logo.vue'
 
 export default {
@@ -26,29 +31,23 @@ export default {
     Logo
   },
 
-  data () {
-    return {
-      photo: '',
-      userId: '',
-      name: '',
-      email: '',
-      user: {}
-    }
-  },
+  computed: {
+    ...mapGetters([
+      'authenticated'
+    ]),
 
-  created () {
-    this.user = firebase.auth().currentUser
-    if (this.user) {
-      this.name = this.user.displayName
-      this.email = this.user.email
-      this.photo = this.user.photoURL
-      this.userId = this.user.uid
-    }
+    ...mapState([
+      'user'
+    ])
   },
 
   methods: {
+    logIn () {
+      this.$router.push('/login')
+    },
+
     logOut () {
-      firebase.auth().signOut()
+      auth.signOut()
     }
   }
 }
