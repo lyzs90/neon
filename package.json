@@ -17,6 +17,7 @@
     "@nuxtjs/pwa": "^2.0.2",
     "firebase": "^4.6.2",
     "nuxt": "^1.0.0-rc11",
+    "vue-clickaway": "^2.1.0",
     "vuetify": "^0.17.2"
   },
   "devDependencies": {

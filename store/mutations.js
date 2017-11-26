@@ -3,6 +3,14 @@ const mutations = {
     state.user = payload
   },
 
+  OPEN_NAV (state) {
+    state.displayNav = true
+  },
+
+  CLOSE_NAV (state) {
+    state.displayNav = false
+  },
+
   SHOW_SNACKBAR (state) {
     state.displaySnackbar = true
   },

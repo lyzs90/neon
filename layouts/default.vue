@@ -1,10 +1,59 @@
 <template>
   <v-app light>
+    <v-toolbar v-if="!displayNav" fixed app>
+      <v-avatar @click="openNav" class="cyan cursor ma-3">
+        <span class="white--text headline">S</span>
+      </v-avatar>
+    </v-toolbar>
+    <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav"app>
+      <v-list>
+        <v-list-tile v-for="item in items" :key="item.title">
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
     <v-content>
-      <nuxt/>
+      <nuxt />
     </v-content>
   </v-app>
 </template>
+
+<script>
+import { directive as onClickaway } from 'vue-clickaway'
+import { mapState, mapMutations } from 'vuex'
+
+export default {
+  directives: {
+    onClickaway
+  },
+
+  data () {
+    return {
+      items: [
+        { icon: '', title: 'Marketplace' },
+        { icon: '', title: 'My Policies' },
+        { icon: '', title: 'FAQ' },
+        { icon: '', title: 'Settings' }
+      ]
+    }
+  },
+
+  computed: {
+    ...mapState([
+      'displayNav'
+    ])
+  },
+
+  methods: {
+    ...mapMutations({
+      openNav: 'OPEN_NAV',
+      closeNav: 'CLOSE_NAV'
+    })
+  }
+}
+</script>
 
 <style>
 html {
@@ -50,5 +99,9 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.cursor {
+  cursor: pointer;
 }
 </style>

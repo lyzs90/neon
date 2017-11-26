@@ -8,6 +8,7 @@ const store = () => {
   return new Vuex.Store({
     state: {
       user: {},
+      displayNav: false,
       displaySnackbar: false
     },
     getters,

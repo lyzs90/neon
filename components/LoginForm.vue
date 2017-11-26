@@ -29,7 +29,13 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
+import Snackbar from '~/components/Snackbar'
+
 export default {
+  components: {
+    Snackbar
+  },
+
   data () {
     return {
       valid: false,
