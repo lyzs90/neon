@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <snackbar color="success" :text="successMessage"></snackbar>
-    <v-flex text-xs-center>
+    <v-flex xs12 sm4 offset-sm4 text-xs-center>
       <v-card class="pa-3">
         <v-form v-model="valid">
           <v-text-field
@@ -71,3 +71,6 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+</style>

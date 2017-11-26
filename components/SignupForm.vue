@@ -1,7 +1,7 @@
 <template>
-  <v-layout>
+  <v-layout column justify-center>
     <snackbar color="error" :text="errorMessage"></snackbar>
-    <v-flex text-xs-center>
+    <v-flex xs12 sm4 offset-sm4 text-xs-center>
       <v-card class="pa-3">
         <v-form v-model="valid" ref="form" lazy-validation>
           <v-text-field
