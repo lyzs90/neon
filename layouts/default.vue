@@ -2,12 +2,12 @@
   <v-app light>
     <v-toolbar v-if="!displayNav" fixed app>
       <v-avatar @click="openNav" class="cyan cursor ma-3">
-        <span class="white--text headline">{{ userInitials }}</span>
+        <span class="white--text headline small-caps">{{ userInitials }}</span>
       </v-avatar>
     </v-toolbar>
     <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav"app>
       <v-list>
-        <v-list-tile v-for="item in items" :key="item.title">
+        <v-list-tile @click="navigateTo(item.link)" v-for="item in items" :key="item.title">
           <v-list-tile-action>
             <v-icon dark>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -35,11 +35,11 @@ export default {
   data () {
     return {
       items: [
-        { icon: 'home', title: 'Home' },
-        { icon: 'store', title: 'Marketplace' },
-        { icon: 'view_quilt', title: 'My Policies' },
-        { icon: 'help', title: 'FAQ' },
-        { icon: 'settings', title: 'Settings' }
+        { icon: 'home', title: 'Home', link: '/' },
+        { icon: 'store', title: 'Marketplace', link: '/marketplace' },
+        { icon: 'view_quilt', title: 'My Policies', link: '/policies' },
+        { icon: 'help', title: 'FAQ', link: '/faq' },
+        { icon: 'settings', title: 'Settings', link: '/settings' }
       ]
     }
   },
@@ -58,7 +58,11 @@ export default {
     ...mapMutations({
       openNav: 'OPEN_NAV',
       closeNav: 'CLOSE_NAV'
-    })
+    }),
+
+    navigateTo (link) {
+      this.$router.push(link)
+    }
   }
 }
 </script>
