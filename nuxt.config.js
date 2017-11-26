@@ -40,7 +40,7 @@ module.exports = {
       }
     },
 
-    vendor: ['vuetify', 'firebase', 'firebaseui']
+    vendor: ['vuetify', 'firebase']
   },
 
   /*
@@ -62,8 +62,7 @@ module.exports = {
   ** Stylesheets
   */
   css: [
-    { src: join(__dirname, 'css/app.styl'), lang: 'styl' },
-    '~/node_modules/firebaseui/dist/firebaseui.css'
+    { src: join(__dirname, 'css/app.styl'), lang: 'styl' }
   ],
 
   /*

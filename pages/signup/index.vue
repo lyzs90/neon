@@ -1,15 +1,15 @@
 <template>
   <v-container>
-    <login-form></login-form>
+    <signup-form></signup-form>
   </v-container>
 </template>
 
 <script>
-import LoginForm from '~/components/LoginForm'
+import SignupForm from '~/components/SignupForm'
 
 export default {
   components: {
-    LoginForm
+    SignupForm
   }
 }
 </script>

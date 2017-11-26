@@ -8,11 +8,8 @@
       <h2 class="subtitle">
         The frontend
       </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
-        <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
-      </div>
       <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
+      <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
       <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
       <p>User: {{ (user && user.displayName) || 'null' }}</p>
       <p>Authenticated: {{ authenticated }}</p>
@@ -44,6 +41,10 @@ export default {
   methods: {
     logIn () {
       this.$router.push('/login')
+    },
+
+    signUp () {
+      this.$router.push('/signup')
     },
 
     logOut () {

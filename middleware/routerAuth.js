@@ -1,5 +1,30 @@
+/**
+ * Note: Middleware is executed on the client & server. But server store is separate from
+ * client store.
+ */
 export default function ({ store, redirect, route }) {
-  if (!store.getters.authenticated && route.name !== 'login') {
-    // issue: middleware is run when store is at base state
+  switch (store.getters.authenticated) {
+    // If authenticated
+    case true:
+      if (route.name === 'login') {
+        return redirect('/')
+      }
+      break
+
+    // If not authenticated, split between public and protected routes
+    default:
+      switch (route.name) {
+        // Public routes
+        case 'index':
+          break
+        case 'signup':
+          break
+        case 'login':
+          break
+
+        // Protected routes
+        default:
+          return redirect('login')
+      }
   }
 }
