@@ -11,8 +11,6 @@
       <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
       <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
       <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
-      <p>User: {{ (user && user.displayName) || 'null' }}</p>
-      <p>Authenticated: {{ authenticated }}</p>
     </div>
   </section>
 </template>

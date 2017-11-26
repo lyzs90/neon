@@ -2,12 +2,15 @@
   <v-app light>
     <v-toolbar v-if="!displayNav" fixed app>
       <v-avatar @click="openNav" class="cyan cursor ma-3">
-        <span class="white--text headline">S</span>
+        <span class="white--text headline">{{ userInitials }}</span>
       </v-avatar>
     </v-toolbar>
     <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav"app>
       <v-list>
         <v-list-tile v-for="item in items" :key="item.title">
+          <v-list-tile-action>
+            <v-icon dark>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
@@ -22,7 +25,7 @@
 
 <script>
 import { directive as onClickaway } from 'vue-clickaway'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
   directives: {
@@ -32,10 +35,11 @@ export default {
   data () {
     return {
       items: [
-        { icon: '', title: 'Marketplace' },
-        { icon: '', title: 'My Policies' },
-        { icon: '', title: 'FAQ' },
-        { icon: '', title: 'Settings' }
+        { icon: 'home', title: 'Home' },
+        { icon: 'store', title: 'Marketplace' },
+        { icon: 'view_quilt', title: 'My Policies' },
+        { icon: 'help', title: 'FAQ' },
+        { icon: 'settings', title: 'Settings' }
       ]
     }
   },
@@ -43,6 +47,10 @@ export default {
   computed: {
     ...mapState([
       'displayNav'
+    ]),
+
+    ...mapGetters([
+      'userInitials'
     ])
   },
 
