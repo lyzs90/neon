@@ -1,29 +1,33 @@
 <template>
   <v-layout>
+    <snackbar color="success" :text="successMessage"></snackbar>
     <v-flex text-xs-center>
-      <v-form v-model="valid">
-        <v-text-field
-          label="Email"
-          v-model="email"
-          :rules="emailRules"
-          required
-        ></v-text-field>
-        <v-text-field
-          label="Password"
-          v-model="password"
-          :type="'password'"
-          :rules="passwordRules"
-          required
-        ></v-text-field>
-      </v-form>
-      <v-btn color="primary" @click.native="submit">Next</v-btn>
+      <v-card class="pa-3">
+        <v-form v-model="valid">
+          <v-text-field
+            name="email"
+            label="Email"
+            v-model="email"
+            :rules="emailRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="Password"
+            v-model="password"
+            :type="'password'"
+            :rules="passwordRules"
+            required
+          ></v-text-field>
+          <v-btn color="primary" @click.native="submit">Next</v-btn>
+        </v-form>
+      </v-card>
     </v-flex>
   </v-layout>
 
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -37,13 +41,18 @@ export default {
       password: '',
       passwordRules: [
         (v) => !!v || 'Password is required'
-      ]
+      ],
+      successMessage: ''
     }
   },
 
   methods: {
     ...mapActions({
       emailLogin: 'signInWithEmail'
+    }),
+
+    ...mapMutations({
+      showSnackbar: 'SHOW_SNACKBAR'
     }),
 
     submit () {
@@ -54,6 +63,8 @@ export default {
         password: vm.password
       })
         .then(() => {
+          vm.successMessage = 'You are logged in!'
+          vm.showSnackbar()
           vm.$router.go(-1)
         })
     }

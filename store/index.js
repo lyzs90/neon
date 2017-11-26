@@ -7,7 +7,8 @@ import mutations from './mutations'
 const store = () => {
   return new Vuex.Store({
     state: {
-      user: {}
+      user: {},
+      displaySnackbar: false
     },
     getters,
     actions,

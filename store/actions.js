@@ -9,17 +9,21 @@ const actions = {
   },
 
   createUserWithEmailAndPassword ({ commit }, { email, password }) {
-    return new Promise((resolve, reject) => {
-      auth.createUserWithEmailAndPassword(email, password)
-      resolve()
-    })
+    return auth.createUserWithEmailAndPassword(email, password)
+      .catch(err => {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            throw new Error('DuplicateEmail')
+          case 'auth/invalid-email':
+            throw new Error('InvalidEmail')
+          default:
+            throw new Error('FirebaseAuthError')
+        }
+      })
   },
 
   signInWithEmail ({ commit }, { email, password }) {
-    return new Promise((resolve, reject) => {
-      auth.signInWithEmailAndPassword(email, password)
-      resolve()
-    })
+    return auth.signInWithEmailAndPassword(email, password)
   }
 }
 
