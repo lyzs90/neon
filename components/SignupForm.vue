@@ -26,7 +26,7 @@
             v-model="confirmPassword"
             min="8"
             :type="'password'"
-            :rules="passwordRules"
+            :rules="confirmPasswordRules"
             required
           ></v-text-field>
           <v-checkbox
@@ -36,7 +36,7 @@
             required
           ></v-checkbox>
           <v-btn color="secondary" @click.native="goBack">Back</v-btn>
-          <v-btn color="primary" @click="submit">Next</v-btn>
+          <v-btn color="primary" @click="submit" :disabled="!valid">Next</v-btn>
         </v-form>
       </v-card>
     </v-flex>
@@ -63,9 +63,12 @@ export default {
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
       password: '',
-      confirmPassword: '',
       passwordRules: [
         (v) => !!v || 'Password is required'
+      ],
+      confirmPassword: '',
+      confirmPasswordRules: [
+        (v) => v === this.password || 'Passwords do not match'
       ],
       checkbox: false,
       errorMessage: ''
