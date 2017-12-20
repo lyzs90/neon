@@ -1,6 +1,6 @@
 /**
- * Note: Middleware is executed on the client & server. But server store is separate from
- * client store.
+ * Note: Middleware is executed on the client & server. But server store is
+ * separate from client store.
  */
 export default function ({ store, redirect, route }) {
   switch (store.getters.authenticated) {

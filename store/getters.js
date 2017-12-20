@@ -4,7 +4,10 @@ const getters = {
   },
 
   userInitials: state => {
-    return (state.user && state.user.email.substring(0, 1)) || 'T'
+    if (state.user && state.user.email) {
+      return state.user.email.substring(0, 1)
+    }
+    return 'T'
   }
 }
 

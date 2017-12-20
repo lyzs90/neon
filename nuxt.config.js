@@ -55,8 +55,8 @@ module.exports = {
   ** Plugins
   */
   plugins: [
-    '~plugins/vuetify.js',
-    '~plugins/firebaseAuth.js'
+    { src: '~plugins/vuetify.js', ssr: true },
+    { src: '~plugins/firebaseAuth.js', ssr: true } // Run on browser only
   ],
 
   /*

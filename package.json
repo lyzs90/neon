@@ -14,15 +14,15 @@
   },
   "dependencies": {
     "@nuxtjs/dotenv": "^1.1.0",
-    "@nuxtjs/pwa": "^2.0.2",
-    "firebase": "^4.6.2",
+    "@nuxtjs/pwa": "^2.0.4",
+    "firebase": "^4.8.1",
     "nuxt": "^1.0.0-rc11",
     "vue-clickaway": "^2.1.0",
-    "vuetify": "^0.17.2"
+    "vuetify": "^0.17.5"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "eslint": "^4.3.0",
+    "eslint": "^4.13.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^3.1.1",
