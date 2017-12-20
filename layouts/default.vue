@@ -1,11 +1,11 @@
 <template>
   <v-app light>
-    <v-toolbar v-if="!displayNav" fixed app>
+    <v-toolbar v-if="!nav.display" fixed app>
       <v-avatar @click="openNav" class="cyan cursor ma-3">
         <span class="white--text headline small-caps">{{ userInitials }}</span>
       </v-avatar>
     </v-toolbar>
-    <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav"app>
+    <v-navigation-drawer fixed stateless dark class="blue" v-if="nav.display" :value="nav.display" v-on-clickaway="closeNav"app>
       <v-list>
         <v-list-tile @click="navigateTo(item.link)" v-for="item in items" :key="item.title">
           <v-list-tile-action>
@@ -18,6 +18,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-content>
+      <snackbar :color="snackbar.color" :text="snackbar.message"></snackbar>
       <nuxt />
     </v-content>
   </v-app>
@@ -27,9 +28,15 @@
 import { directive as onClickaway } from 'vue-clickaway'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
+import Snackbar from '~/components/Snackbar'
+
 export default {
   directives: {
     onClickaway
+  },
+
+  components: {
+    Snackbar
   },
 
   data () {
@@ -46,7 +53,8 @@ export default {
 
   computed: {
     ...mapState([
-      'displayNav'
+      'nav',
+      'snackbar'
     ]),
 
     ...mapGetters([

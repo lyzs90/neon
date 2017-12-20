@@ -4,19 +4,22 @@ const mutations = {
   },
 
   OPEN_NAV (state) {
-    state.displayNav = true
+    state.nav.display = true
   },
 
   CLOSE_NAV (state) {
-    state.displayNav = false
+    state.nav.display = false
   },
 
-  SHOW_SNACKBAR (state) {
-    state.displaySnackbar = true
+  SHOW_SNACKBAR (state, payload) {
+    const { color, message } = payload
+    state.snackbar.display = true
+    state.snackbar.color = color
+    state.snackbar.message = message
   },
 
   CLOSE_SNACKBAR (state) {
-    state.displaySnackbar = false
+    state.snackbar.display = false
   }
 }
 

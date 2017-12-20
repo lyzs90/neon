@@ -4,7 +4,7 @@
     :color="color"
     :top="true"
     :right="true"
-    v-model="displaySnackbar"
+    v-model="display"
   >
     {{ text }}
     <v-btn flat @click.native="closeSnackbar">Close</v-btn>
@@ -12,16 +12,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
-  props: ['color', 'text'],
-
-  computed: {
-    ...mapState([
-      'displaySnackbar'
-    ])
-  },
+  props: ['display', 'color', 'text'],
 
   methods: {
     ...mapMutations({

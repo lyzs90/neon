@@ -1,8 +1,7 @@
 <template>
   <v-layout column justify-center>
-    <snackbar color="error" :text="errorMessage"></snackbar>
     <v-flex xs12 sm4 offset-sm4 text-xs-center>
-      <v-card class="pa-3">
+      <v-card class="pa-3 w-100">
         <v-form v-model="valid" ref="form" lazy-validation>
           <v-text-field
             name="email"
@@ -45,15 +44,9 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-
-import Snackbar from '~/components/Snackbar'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
-  components: {
-    Snackbar
-  },
-
   data () {
     return {
       valid: false,
@@ -70,15 +63,8 @@ export default {
       confirmPasswordRules: [
         (v) => v === this.password || 'Passwords do not match'
       ],
-      checkbox: false,
-      errorMessage: ''
+      checkbox: false
     }
-  },
-
-  computed: {
-    ...mapState([
-      'displaySnackbar'
-    ])
   },
 
   methods: {
@@ -103,21 +89,31 @@ export default {
           password: vm.password
         })
           .then(() => {
+            vm.showSnackbar({
+              color: 'success',
+              message: 'Account created!'
+            })
             vm.$router.push('/')
           })
           .catch(err => {
             switch (err.message) {
               case 'DuplicateEmail':
-                vm.errorMessage = 'An email with this account already exists'
-                vm.showSnackbar()
+                vm.showSnackbar({
+                  color: 'error',
+                  message: 'An email with this account already exists'
+                })
                 break
               case 'InvalidEmail':
-                vm.errorMessage = 'Invalid email specified'
-                vm.showSnackbar()
+                vm.showSnackbar({
+                  color: 'error',
+                  message: 'Invalid email specified'
+                })
                 break
               default:
-                vm.errorMessage = 'Server error'
-                vm.showSnackbar()
+                vm.showSnackbar({
+                  color: 'error',
+                  message: 'Server error'
+                })
             }
           })
       }

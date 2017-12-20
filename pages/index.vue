@@ -1,22 +1,24 @@
 <template>
-  <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        neon
-      </h1>
-      <h2 class="subtitle">
-        The frontend
-      </h2>
-      <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
-      <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
-      <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
-    </div>
-  </section>
+  <v-layout>
+    <section class="container">
+      <div>
+        <logo/>
+        <h1 class="title">
+          neon
+        </h1>
+        <h2 class="subtitle">
+          The frontend
+        </h2>
+        <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
+        <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
+        <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
+      </div>
+    </section>
+  </v-layout>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 
 import { auth } from '~/services/firebaseService'
 import Logo from '~/components/Logo.vue'
@@ -37,6 +39,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      showSnackbar: 'SHOW_SNACKBAR'
+    }),
+
     logIn () {
       this.$router.push('/login')
     },
@@ -46,7 +52,15 @@ export default {
     },
 
     logOut () {
+      const vm = this
+
       auth.signOut()
+        .then(() => {
+          vm.showSnackbar({
+            color: 'success',
+            message: 'You have logged out!'
+          })
+        })
     }
   }
 }

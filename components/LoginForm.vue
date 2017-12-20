@@ -1,8 +1,7 @@
 <template>
   <v-layout>
-    <snackbar color="success" :text="successMessage"></snackbar>
     <v-flex xs12 sm4 offset-sm4 text-xs-center>
-      <v-card class="pa-3">
+      <v-card class="pa-3 w-100">
         <v-form v-model="valid">
           <v-text-field
             name="email"
@@ -23,19 +22,12 @@
       </v-card>
     </v-flex>
   </v-layout>
-
 </template>
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
-import Snackbar from '~/components/Snackbar'
-
 export default {
-  components: {
-    Snackbar
-  },
-
   data () {
     return {
       valid: false,
@@ -47,8 +39,7 @@ export default {
       password: '',
       passwordRules: [
         (v) => !!v || 'Password is required'
-      ],
-      successMessage: ''
+      ]
     }
   },
 
@@ -69,8 +60,10 @@ export default {
         password: vm.password
       })
         .then(() => {
-          vm.successMessage = 'You are logged in!'
-          vm.showSnackbar()
+          vm.showSnackbar({
+            color: 'success',
+            message: 'You are logged in!'
+          })
           vm.$router.go(-1)
         })
     }

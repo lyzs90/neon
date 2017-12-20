@@ -24,6 +24,10 @@ export default function ({ store, redirect, route }) {
 
         // Protected routes
         default:
+          store.commit('SHOW_SNACKBAR', {
+            color: 'error',
+            message: 'You must log in to access this page!'
+          })
           return redirect('login')
       }
   }
