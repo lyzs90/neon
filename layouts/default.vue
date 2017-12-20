@@ -1,76 +1,30 @@
 <template>
   <v-app light>
-    <v-toolbar v-if="!nav.display" fixed app>
-      <v-avatar @click="openNav" class="cyan cursor ma-3">
-        <span class="white--text headline small-caps">{{ userInitials }}</span>
-      </v-avatar>
-    </v-toolbar>
-    <v-navigation-drawer fixed stateless dark class="blue" v-if="nav.display" :value="nav.display" v-on-clickaway="closeNav"app>
-      <v-list>
-        <v-list-tile @click="navigateTo(item.link)" v-for="item in items" :key="item.title">
-          <v-list-tile-action>
-            <v-icon dark>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+    <navigation :display="nav.display"></navigation>
     <v-content>
-      <snackbar :color="snackbar.color" :text="snackbar.message"></snackbar>
+      <snackbar :display="snackbar.display" :color="snackbar.color" :text="snackbar.message"></snackbar>
       <nuxt />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import { directive as onClickaway } from 'vue-clickaway'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
+import Navigation from '~/components/Navigation'
 import Snackbar from '~/components/Snackbar'
 
 export default {
-  directives: {
-    onClickaway
-  },
-
   components: {
+    Navigation,
     Snackbar
-  },
-
-  data () {
-    return {
-      items: [
-        { icon: 'home', title: 'Home', link: '/' },
-        { icon: 'store', title: 'Marketplace', link: '/marketplace' },
-        { icon: 'view_quilt', title: 'My Policies', link: '/policies' },
-        { icon: 'help', title: 'FAQ', link: '/faq' },
-        { icon: 'settings', title: 'Settings', link: '/settings' }
-      ]
-    }
   },
 
   computed: {
     ...mapState([
       'nav',
       'snackbar'
-    ]),
-
-    ...mapGetters([
-      'userInitials'
     ])
-  },
-
-  methods: {
-    ...mapMutations({
-      openNav: 'OPEN_NAV',
-      closeNav: 'CLOSE_NAV'
-    }),
-
-    navigateTo (link) {
-      this.$router.push(link)
-    }
   }
 }
 </script>
@@ -119,9 +73,5 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
-}
-
-.cursor {
-  cursor: pointer;
 }
 </style>
