@@ -81,36 +81,34 @@ export default {
     },
 
     submit () {
-      const vm = this
-
       if (this.$refs.form.validate()) {
-        return vm.createUser({
-          email: vm.email,
-          password: vm.password
+        return this.createUser({
+          email: this.email,
+          password: this.password
         })
           .then(() => {
-            vm.showSnackbar({
+            this.showSnackbar({
               color: 'success',
               message: 'Account created!'
             })
-            vm.$router.push('/')
+            this.$router.push('/')
           })
           .catch(err => {
             switch (err.message) {
               case 'DuplicateEmail':
-                vm.showSnackbar({
+                this.showSnackbar({
                   color: 'error',
                   message: 'An email with this account already exists'
                 })
                 break
               case 'InvalidEmail':
-                vm.showSnackbar({
+                this.showSnackbar({
                   color: 'error',
                   message: 'Invalid email specified'
                 })
                 break
               default:
-                vm.showSnackbar({
+                this.showSnackbar({
                   color: 'error',
                   message: 'Server error'
                 })

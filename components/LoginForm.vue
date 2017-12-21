@@ -53,18 +53,16 @@ export default {
     }),
 
     submit () {
-      const vm = this
-
-      return vm.emailLogin({
-        email: vm.email,
-        password: vm.password
+      return this.emailLogin({
+        email: this.email,
+        password: this.password
       })
         .then(() => {
-          vm.showSnackbar({
+          this.showSnackbar({
             color: 'success',
             message: 'You are logged in!'
           })
-          vm.$router.go(-1)
+          this.$router.go(-1)
         })
     }
   }

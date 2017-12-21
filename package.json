@@ -13,8 +13,12 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^4.5.0",
     "@nuxtjs/dotenv": "^1.1.0",
     "@nuxtjs/pwa": "^2.0.4",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "firebase": "^4.8.1",
     "nuxt": "^1.0.0-rc11",
     "vue-clickaway": "^2.1.0",

@@ -52,14 +52,14 @@ export default {
     },
 
     logOut () {
-      const vm = this
-
       auth.signOut()
         .then(() => {
-          vm.showSnackbar({
+          this.showSnackbar({
             color: 'success',
             message: 'You have logged out!'
           })
+
+          return this.$axios.$get('/endUserSession')
         })
     }
   }

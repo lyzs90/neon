@@ -4,7 +4,7 @@
     :color="color"
     :top="true"
     :right="true"
-    v-model="display"
+    :value="displaySnackbar"
   >
     {{ text }}
     <v-btn flat @click.native="closeSnackbar">Close</v-btn>
@@ -16,6 +16,12 @@ import { mapMutations } from 'vuex'
 
 export default {
   props: ['display', 'color', 'text'],
+
+  computed: {
+    displaySnackbar () {
+      return this.display // Need computed property because props cant be mutated
+    }
+  },
 
   methods: {
     ...mapMutations({

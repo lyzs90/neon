@@ -1,9 +1,19 @@
 const { join } = require('path')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+require('dotenv').config()
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  /**
+   * Env
+   */
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+
+  /**
+   * Page Headers
+   */
   head: {
     title: 'neon',
     meta: [
@@ -17,18 +27,18 @@ module.exports = {
     ]
   },
 
-  /*
-  ** Customize the progress bar color
-  */
+  /**
+   * Customize progress bar color
+   */
   loading: { color: '#3B8070' },
 
-  /*
-  ** Build configuration
-  */
+  /**
+   * Build Configuration
+   */
   build: {
-    /*
-    ** Run ESLint on save
-    */
+    /**
+     * Run eslint on save
+     */
     extend (config, ctx) {
       if (ctx.dev && ctx.isClient) {
         config.module.rules.push({
@@ -43,32 +53,57 @@ module.exports = {
     vendor: ['vuetify', 'firebase']
   },
 
-  /*
-  ** Modules
-  */
+  /**
+   * Server Middlware
+   *
+   * Nuxt internally creates a connect instance, so we can register our
+   * middleware to it's stack and having chance to provide more routes like API
+   * without need to an external server.
+   */
+  serverMiddleware: [
+    bodyParser.json(),
+    session({
+      secret: process.env.COOKIE_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 3600000 } // 1 hour
+    }),
+    '~/api' // Internal API routes
+  ],
+
+  /**
+   * Modules
+   */
   modules: [
     '@nuxtjs/dotenv',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/axios'
   ],
 
-  /*
-  ** Plugins
-  */
+  axios: {
+    errorHandler (errorReason, { error }) {
+      error(errorReason)
+    }
+  },
+
+  /**
+   * Plugins
+   */
   plugins: [
     { src: '~plugins/vuetify.js', ssr: true },
-    { src: '~plugins/firebaseAuth.js', ssr: true } // Run on browser only
+    { src: '~plugins/firebaseAuth.js', ssr: true }
   ],
 
-  /*
-  ** Stylesheets
-  */
+  /**
+   * Stylesheets
+   */
   css: [
     { src: join(__dirname, 'css/app.styl'), lang: 'styl' }
   ],
 
-  /*
-  ** Router
-  */
+  /**
+   * Router
+   */
   router: {
     middleware: 'routerAuth'
   }

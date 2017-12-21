@@ -2,14 +2,26 @@ import { auth } from '~/services/firebaseService'
 
 const actions = {
   /**
-   * This will prefill the server store for use in middleware
+   * nuxtServerInit is called by Nuxt.js before server-rendering every page
    */
-  nuxtServerInit ({ commit }, { store }) {
-    // Db should know if user is authenticated. Fetch user data and commit to server store. But how to know which user is making the request?
+  nuxtServerInit ({ commit }, { req }) {
+    if (req.session && req.session.user) {
+      commit('SET_USER', req.session.user)
+    }
   },
 
   createUserWithEmailAndPassword ({ commit }, { email, password }) {
     return auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const userKey = Object.keys(window.localStorage)
+          .filter(item => item.startsWith('firebase:authUser'))[0]
+        const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined
+
+        if (user) {
+          // Make request to internal server to save user session. So it can be retrieved during SSR
+          return this.$axios.$post('/persistUserSession', { user })
+        }
+      })
       .catch(err => {
         switch (err.code) {
           case 'auth/email-already-in-use':
@@ -24,6 +36,16 @@ const actions = {
 
   signInWithEmail ({ commit }, { email, password }) {
     return auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        const userKey = Object.keys(window.localStorage)
+          .filter(item => item.startsWith('firebase:authUser'))[0]
+        const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined
+
+        if (user) {
+          // Make request to internal server to save user session. So it can be retrieved during SSR
+          return this.$axios.$post('/persistUserSession', { user })
+        }
+      })
   }
 }
 
