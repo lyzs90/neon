@@ -4,11 +4,18 @@
       <div>
         <logo/>
         <h1 class="title">
-          neon
+          p2p ether portal
         </h1>
         <h2 class="subtitle">
-          The frontend
+          ethersupply
         </h2>
+        <h5>
+          swap ether and fiat directly with people like you. use Stripe-powered fiat escrow and decentralized Ethereum-powered escrow to guarantee simultaneous release of funds and ether.
+        </h5>
+        <br />
+        <h5>
+          trade with convenience and safety.
+        </h5>
       </div>
     </section>
   </v-layout>

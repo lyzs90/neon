@@ -7,14 +7,14 @@
         <v-layout class="ml-3 mr-3">
           <v-flex sm6>
             <v-layout row justify-start align-center>
-              <v-avatar class="cyan ma-3">
-                <router-link to="/" class="no-underline">
+              <router-link to="/" class="no-underline">
+                <v-avatar class="cyan ma-3">
                   <span class="white--text headline small-caps">
                     {{ userInitials }}
                   </span>
-                </router-link>
-              </v-avatar>
-              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp" :key="item.title" class="cursor pa-3 flex-initial">
+                </v-avatar>
+              </router-link>
+              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial">
                 {{ item.title }}
               </v-layout>
             </v-layout>
@@ -52,7 +52,7 @@
       </v-toolbar>
       <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav" app>
         <v-list>
-          <v-list-tile @click="navigateTo(item.link)" v-for="item in items" :key="item.title">
+          <v-list-tile @click="navigateTo(item.link)" v-for="item in items" v-if="item.authenticated === authenticated" :key="item.title">
             <v-list-tile-action>
               <v-icon dark>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -101,11 +101,11 @@ export default {
       displayLoginModal: false,
       displaySignupModal: false,
       items: [
-        { icon: 'home', title: 'Home', link: '/', showSmAndUp: false },
-        { icon: 'store', title: 'Buy', link: '/marketplace', showSmAndUp: true },
-        { icon: 'view_quilt', title: 'Sell', link: '/policies', showSmAndUp: true },
-        { icon: 'help', title: 'FAQ', link: '/faq', showSmAndUp: false },
-        { icon: 'settings', title: 'Settings', link: '/settings', showSmAndUp: true }
+        { icon: 'home', title: 'Home', link: '/', showSmAndUp: false, authenticated: false },
+        { icon: 'store', title: 'Buy', link: '/marketplace', showSmAndUp: true, authenticated: true },
+        { icon: 'view_quilt', title: 'Sell', link: '/policies', showSmAndUp: true, authenticated: true },
+        { icon: 'help', title: 'FAQ', link: '/faq', showSmAndUp: false, authenticated: false },
+        { icon: 'settings', title: 'Settings', link: '/settings', showSmAndUp: true, authenticated: true }
       ]
     }
   },
