@@ -8,7 +8,11 @@
           <v-flex sm6>
             <v-layout row justify-start align-center>
               <v-avatar class="cyan ma-3">
-                <span class="white--text headline small-caps">{{ userInitials }}</span>
+                <router-link to="/" class="no-underline">
+                  <span class="white--text headline small-caps">
+                    {{ userInitials }}
+                  </span>
+                </router-link>
               </v-avatar>
               <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp" :key="item.title" class="cursor pa-3 flex-initial">
                 {{ item.title }}
@@ -17,9 +21,9 @@
           </v-flex>
           <v-flex sm6>
             <v-layout row justify-end align-center>
-              <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
-              <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
-              <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
+              <v-btn v-if="!authenticated" @click.stop="toggleSignupModal"  color="secondary">Sign up</v-btn>
+              <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
+              <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
               <span class="cursor pa-3">FAQ</span>
             </v-layout>
           </v-flex>
@@ -39,9 +43,9 @@
           </v-flex>
           <v-flex xs8>
             <v-layout row justify-end align-center>
-              <v-btn v-if="!authenticated" @click='signUp' color='secondary'>Sign up</v-btn>
-              <v-btn v-if="!authenticated" @click='logIn' color='primary'>Log in</v-btn>
-              <v-btn v-if="authenticated" @click='logOut' color='secondary'>Log out</v-btn>
+              <v-btn v-if="!authenticated" @click.stop="toggleSignupModal" color="secondary">Sign up</v-btn>
+              <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
+              <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
             </v-layout>
           </v-flex>
         </v-layout>
@@ -59,6 +63,16 @@
         </v-list>
       </v-navigation-drawer>
     </v-layout>
+
+    <!-- LoginModal -->
+    <v-dialog v-model="displayLoginModal" max-width="500px">
+      <login-form v-on:close="toggleLoginModal"></login-form>
+    </v-dialog>
+
+    <!-- SignupModal -->
+    <v-dialog v-model="displaySignupModal" max-width="500px">
+      <signup-form v-on:close="toggleSignupModal"></signup-form>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -67,18 +81,27 @@ import { directive as onClickaway } from 'vue-clickaway'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 
 import { auth } from '~/services/firebaseService'
+import LoginForm from '~/components/LoginForm'
+import SignupForm from '~/components/SignupForm'
 
 export default {
   directives: {
     onClickaway
   },
 
+  components: {
+    LoginForm,
+    SignupForm
+  },
+
   props: ['display'],
 
   data () {
     return {
+      displayLoginModal: false,
+      displaySignupModal: false,
       items: [
-        { icon: 'home', title: 'Home', link: '/', showSmAndUp: true },
+        { icon: 'home', title: 'Home', link: '/', showSmAndUp: false },
         { icon: 'store', title: 'Buy', link: '/marketplace', showSmAndUp: true },
         { icon: 'view_quilt', title: 'Sell', link: '/policies', showSmAndUp: true },
         { icon: 'help', title: 'FAQ', link: '/faq', showSmAndUp: false },
@@ -113,12 +136,12 @@ export default {
       this.$router.push(link)
     },
 
-    logIn () {
-      this.$router.push('/login')
+    toggleLoginModal () {
+      this.displayLoginModal = !this.displayLoginModal
     },
 
-    signUp () {
-      this.$router.push('/signup')
+    toggleSignupModal () {
+      this.displaySignupModal = !this.displaySignupModal
     },
 
     logOut () {

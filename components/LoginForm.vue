@@ -1,27 +1,26 @@
 <template>
-  <v-layout>
-    <v-flex xs12 sm4 offset-sm4 text-xs-center>
-      <v-card class="pa-3 w-100">
-        <v-form v-model="valid">
-          <v-text-field
-            name="email"
-            label="Email"
-            v-model="email"
-            :rules="emailRules"
-            required
-          ></v-text-field>
-          <v-text-field
-            label="Password"
-            v-model="password"
-            :type="'password'"
-            :rules="passwordRules"
-            required
-          ></v-text-field>
-          <v-btn color="primary" @click.native="submit">Next</v-btn>
-        </v-form>
-      </v-card>
-    </v-flex>
-  </v-layout>
+  <v-card class="pa-3">
+    <v-card-title>
+      Log in
+    </v-card-title>
+    <v-form v-model="valid">
+      <v-text-field
+        name="email"
+        label="Email"
+        v-model="email"
+        :rules="emailRules"
+        required
+      ></v-text-field>
+      <v-text-field
+        label="Password"
+        v-model="password"
+        :type="'password'"
+        :rules="passwordRules"
+        required
+      ></v-text-field>
+      <v-btn color="primary" @click.native="submit">Next</v-btn>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -62,7 +61,7 @@ export default {
             color: 'success',
             message: 'You are logged in!'
           })
-          this.$router.go(-1)
+          this.$emit('close')
         })
     }
   }
