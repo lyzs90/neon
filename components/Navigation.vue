@@ -52,7 +52,7 @@
       </v-toolbar>
       <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav" app>
         <v-list>
-          <v-list-tile @click="navigateTo(item.link)" v-for="item in items" v-if="item.authenticated === authenticated" :key="item.title">
+          <v-list-tile @click="navigateTo(item.link)" v-for="item in items"  :key="item.title">
             <v-list-tile-action>
               <v-icon dark>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -102,8 +102,8 @@ export default {
       displaySignupModal: false,
       items: [
         { icon: 'home', title: 'Home', link: '/', showSmAndUp: false, authenticated: false },
-        { icon: 'store', title: 'Buy', link: '/marketplace', showSmAndUp: true, authenticated: true },
-        { icon: 'view_quilt', title: 'Sell', link: '/policies', showSmAndUp: true, authenticated: true },
+        { icon: 'store', title: 'Buy', link: '/buyers', showSmAndUp: true, authenticated: true },
+        { icon: 'view_quilt', title: 'Sell', link: '/sellers', showSmAndUp: true, authenticated: true },
         { icon: 'help', title: 'FAQ', link: '/faq', showSmAndUp: false, authenticated: false },
         { icon: 'settings', title: 'Settings', link: '/settings', showSmAndUp: true, authenticated: true }
       ]
@@ -133,6 +133,7 @@ export default {
     }),
 
     navigateTo (link) {
+      this.closeNav()
       this.$router.push(link)
     },
 

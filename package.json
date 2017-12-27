@@ -21,6 +21,8 @@
     "express-session": "^1.15.6",
     "firebase": "^4.8.1",
     "nuxt": "^1.0.0-rc11",
+    "stripe": "^5.4.0",
+    "uuid": "^3.1.0",
     "vue-clickaway": "^2.1.0",
     "vuetify": "^0.17.5"
   },

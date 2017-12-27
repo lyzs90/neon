@@ -5,10 +5,11 @@ require('dotenv').config()
 
 module.exports = {
   /**
-   * Env
+   * Env to be shared on server & client. Otherwise, process.env can only be used serverside
    */
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    STRIPE_CLIENT_ID: process.env.STRIPE_CLIENT_ID
   },
 
   /**

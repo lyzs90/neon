@@ -6,9 +6,6 @@ export default function ({ store, redirect, route }) {
   switch (store.getters.authenticated) {
     // If authenticated
     case true:
-      if (route.name === 'login') {
-        return redirect('/')
-      }
       break
 
     // If not authenticated, split between public and protected routes
@@ -17,9 +14,7 @@ export default function ({ store, redirect, route }) {
         // Public routes
         case 'index':
           break
-        case 'signup':
-          break
-        case 'login':
+        case 'faq':
           break
 
         // Protected routes
@@ -28,7 +23,7 @@ export default function ({ store, redirect, route }) {
             color: 'error',
             message: 'You must log in to access this page!'
           })
-          return redirect('login')
+          return redirect('/')
       }
   }
 }
