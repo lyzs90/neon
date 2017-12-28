@@ -1,6 +1,8 @@
+import { isEmpty } from 'lodash'
+
 const getters = {
   authenticated: state => {
-    return !!state.user
+    return !isEmpty(state.user)
   },
 
   userInitials: state => {

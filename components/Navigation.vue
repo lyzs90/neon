@@ -129,7 +129,8 @@ export default {
     ...mapMutations({
       openNav: 'OPEN_NAV',
       closeNav: 'CLOSE_NAV',
-      showSnackbar: 'SHOW_SNACKBAR'
+      showSnackbar: 'SHOW_SNACKBAR',
+      setUser: 'SET_USER'
     }),
 
     navigateTo (link) {
@@ -152,6 +153,7 @@ export default {
             color: 'success',
             message: 'You have logged out!'
           })
+          this.setUser({})
 
           return this.$axios.$get('/endUserSession')
         })

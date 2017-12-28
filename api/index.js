@@ -16,6 +16,16 @@ router.use((req, res, next) => {
 })
 
 /**
+ * @api {POST} /api/validateAuthSession
+ */
+router.get('/validateAuthSession', (req, res) => {
+  if (req.session.user) {
+    return res.status(200).send(true)
+  }
+  return res.status(200).send(false)
+})
+
+/**
  * @api {POST} /api/persistUserSession
  *
  * @apiParam (body)  {Object}  user  Firebase user object

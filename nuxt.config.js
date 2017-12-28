@@ -1,6 +1,7 @@
 const { join } = require('path')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const morgan = require('morgan')
 require('dotenv').config()
 
 module.exports = {
@@ -63,6 +64,7 @@ module.exports = {
    */
   serverMiddleware: [
     bodyParser.json(),
+    morgan('dev'),
     session({
       secret: process.env.COOKIE_SECRET,
       resave: false,
@@ -92,7 +94,7 @@ module.exports = {
    */
   plugins: [
     { src: '~plugins/vuetify.js', ssr: true },
-    { src: '~plugins/firebaseAuth.js', ssr: true }
+    { src: '~plugins/firebaseAuth.js', ssr: false } // dont run on server because it needs localStorage
   ],
 
   /**
