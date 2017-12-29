@@ -10,6 +10,10 @@ const getters = {
       return state.user.email.substring(0, 1)
     }
     return 'T'
+  },
+
+  userID: state => {
+    return state.user.uid
   }
 }
 

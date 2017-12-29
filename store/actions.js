@@ -1,4 +1,6 @@
 import { auth } from '~/services/firebaseService'
+import qs from 'qs'
+import uuidv4 from 'uuid/v4'
 
 const actions = {
   /**
@@ -64,6 +66,28 @@ const actions = {
           return this.$axios.$post('/persistUserSession', { user })
         }
       })
+  },
+
+  signOut ({ commit }) {
+    return auth.signOut()
+      .then(() => {
+        commit('SET_USER', {})
+
+        return this.$axios.$get('/endUserSession')
+      })
+  },
+
+  authorizeStripe ({ getters }) {
+    const userID = getters.userID
+    const reqID = uuidv4()
+    const AUTHORIZE_URI = 'https://connect.stripe.com/oauth/authorize'
+
+    window.location = AUTHORIZE_URI + '?' + qs.stringify({
+      response_type: 'code',
+      scope: 'read_write',
+      client_id: process.env.STRIPE_CLIENT_ID,
+      state: `${userID}:${reqID}`
+    })
   }
 }
 

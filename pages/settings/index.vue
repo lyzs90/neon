@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout>
       <v-flex xs12 justify-center>
-        <a @click="stripeOAuth" class="stripe-connect"><span>Connect with Stripe</span></a>
+        <a @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
       </v-flex>
     </v-layout>
   </v-container>
@@ -10,15 +10,13 @@
 
 <script>
 
-import uuidv4 from 'uuid/v4'
+import { mapActions } from 'vuex'
 
 export default {
   methods: {
-    stripeOAuth () {
-      const reqID = uuidv4()
-
-      window.location = `https://connect.stripe.com/express/oauth/authorize?client_id=${process.env.STRIPE_CLIENT_ID}&stripe_user[country]=SG&stripe_user[business_type]=individual&state=${reqID}`
-    }
+    ...mapActions({
+      authorizeStripe: 'authorizeStripe'
+    })
   }
 }
 </script>

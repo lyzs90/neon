@@ -15,3 +15,5 @@ dist
 
 # PWA
 sw.*
+
+sa-key.json

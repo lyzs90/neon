@@ -78,9 +78,8 @@
 
 <script>
 import { directive as onClickaway } from 'vue-clickaway'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import { auth } from '~/services/firebaseService'
 import LoginForm from '~/components/LoginForm'
 import SignupForm from '~/components/SignupForm'
 
@@ -126,11 +125,14 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      signOut: 'signOut'
+    }),
+
     ...mapMutations({
       openNav: 'OPEN_NAV',
       closeNav: 'CLOSE_NAV',
-      showSnackbar: 'SHOW_SNACKBAR',
-      setUser: 'SET_USER'
+      showSnackbar: 'SHOW_SNACKBAR'
     }),
 
     navigateTo (link) {
@@ -147,15 +149,12 @@ export default {
     },
 
     logOut () {
-      auth.signOut()
+      return this.signOut()
         .then(() => {
           this.showSnackbar({
             color: 'success',
             message: 'You have logged out!'
           })
-          this.setUser({})
-
-          return this.$axios.$get('/endUserSession')
         })
     }
   }

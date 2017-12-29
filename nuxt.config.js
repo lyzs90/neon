@@ -1,7 +1,10 @@
 const { join } = require('path')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const winston = require('winston').cli() // enable colors
+const uuidv4 = require('uuid/v4')
 const morgan = require('morgan')
+const url = require('url')
 require('dotenv').config()
 
 module.exports = {
@@ -64,6 +67,25 @@ module.exports = {
    */
   serverMiddleware: [
     bodyParser.json(),
+
+    // Attach uuid to each request
+    (req, res, next) => {
+      req.uid = uuidv4()
+
+      const previewUrl = req.url.length < 75 ? req.url : req.url.slice(0, 72) + '...'
+
+      if (req.method !== 'OPTIONS') {
+        winston.info(`${req.uid} - Starting to process request for ${req.method} ${previewUrl}`)
+      }
+
+      next()
+    },
+
+    // Attach querystring to req.query FIXME: find out why this doesnt work OOTB
+    (req, res, next) => {
+      req.query = url.parse(req.url, true).query
+      next()
+    },
     morgan('dev'),
     session({
       secret: process.env.COOKIE_SECRET,
@@ -80,7 +102,7 @@ module.exports = {
   modules: [
     '@nuxtjs/dotenv',
     '@nuxtjs/pwa',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios' // Axios is used on the client. Request is used on the server
   ],
 
   axios: {

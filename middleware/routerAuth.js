@@ -13,6 +13,10 @@ export default function ({ store, redirect, route, app }) {
     case 'faq':
       break
 
+    // Undefined route
+    // case null:
+    //  return redirect('/')
+
     // Protected routes
     default:
       return app.$axios.$get('/validateAuthSession')
