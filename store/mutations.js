@@ -20,6 +20,10 @@ const mutations = {
 
   CLOSE_SNACKBAR (state) {
     state.snackbar.display = false
+  },
+
+  TOGGLE_SPINNER (state) {
+    state.spinner.display = !state.spinner.display
   }
 }
 

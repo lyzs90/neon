@@ -77,10 +77,12 @@ const actions = {
       })
   },
 
-  authorizeStripe ({ getters }) {
+  authorizeStripe ({ commit, getters }) {
     const userID = getters.userID
     const reqID = uuidv4()
     const AUTHORIZE_URI = 'https://connect.stripe.com/oauth/authorize'
+
+    commit('TOGGLE_SPINNER')
 
     window.location = AUTHORIZE_URI + '?' + qs.stringify({
       response_type: 'code',

@@ -1,9 +1,12 @@
 <template>
   <v-app light>
-    <navigation :display="nav.display"></navigation>
+    <navigation :display="nav.display" :shrink="shrinkToolbar"></navigation>
     <v-content>
       <snackbar :display="snackbar.display" :color="snackbar.color" :text="snackbar.message"></snackbar>
-      <nuxt />
+      <v-layout v-if="spinner.display" row justify-center>
+        <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" color="primary"></v-progress-circular>
+      </v-layout>
+      <nuxt v-if="!spinner.display" v-scroll="onScroll" />
     </v-content>
   </v-app>
 </template>
@@ -20,11 +23,26 @@ export default {
     Snackbar
   },
 
+  data: () => ({
+    shrinkToolbar: false
+  }),
+
   computed: {
     ...mapState([
       'nav',
-      'snackbar'
+      'snackbar',
+      'spinner'
     ])
+  },
+
+  methods: {
+    onScroll (e) {
+      if (window.pageYOffset > 50 || document.documentElement.scrollTop > 50) {
+        this.shrinkToolbar = true
+      } else {
+        this.shrinkToolbar = false
+      }
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <v-layout>
     <!-- Tablet / Desktop -->
     <v-layout class="hidden-xs-only">
-      <v-toolbar v-if="!displayNav" fixed app>
+      <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
 
         <v-layout class="ml-3 mr-3">
           <v-flex sm6>
@@ -14,7 +14,7 @@
                   </span>
                 </v-avatar>
               </router-link>
-              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial">
+              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial" v-bind:class="{ 'white--text': shrink }">
                 {{ item.title }}
               </v-layout>
             </v-layout>
@@ -24,7 +24,7 @@
               <v-btn v-if="!authenticated" @click.stop="toggleSignupModal"  color="secondary">Sign up</v-btn>
               <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
               <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
-              <span class="cursor pa-3">FAQ</span>
+              <span class="cursor pa-3" v-bind:class="{ 'white--text': shrink }">FAQ</span>
             </v-layout>
           </v-flex>
         </v-layout>
@@ -58,6 +58,7 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -93,18 +94,19 @@ export default {
     SignupForm
   },
 
-  props: ['display'],
+  props: ['display', 'shrink'],
 
   data () {
     return {
       displayLoginModal: false,
       displaySignupModal: false,
       items: [
-        { icon: 'home', title: 'Home', link: '/', showSmAndUp: false, authenticated: false },
-        { icon: 'store', title: 'Buy', link: '/buyers', showSmAndUp: true, authenticated: true },
-        { icon: 'view_quilt', title: 'Sell', link: '/sellers', showSmAndUp: true, authenticated: true },
-        { icon: 'help', title: 'FAQ', link: '/faq', showSmAndUp: false, authenticated: false },
-        { icon: 'settings', title: 'Settings', link: '/settings', showSmAndUp: true, authenticated: true }
+        { icon: 'home', title: 'Home', subtitle: '', link: '/', showSmAndUp: false, authenticated: false },
+        { icon: 'add_circle_outline', title: 'Buy', subtitle: '', link: '/buy', showSmAndUp: true, authenticated: true },
+        { icon: 'remove_circle_outline', title: 'Sell', subtitle: '', link: '/sell', showSmAndUp: true, authenticated: true },
+        { icon: 'account_balance', title: 'My Trades', subtitle: '', link: '/trades', showSmAndUp: true, authenticated: true },
+        { icon: 'help', title: 'FAQ', subtitle: '', link: '/faq', showSmAndUp: false, authenticated: false },
+        { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings', showSmAndUp: true, authenticated: true }
       ]
     }
   },
@@ -162,9 +164,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-.cursor {
-  cursor: pointer;
-}
-
 </style>

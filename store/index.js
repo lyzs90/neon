@@ -15,6 +15,9 @@ const store = () => {
         display: false,
         color: '',
         message: ''
+      },
+      spinner: {
+        display: false
       }
     },
     getters,
