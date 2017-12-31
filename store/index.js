@@ -9,7 +9,8 @@ const store = () => {
     state: {
       user: {},
       nav: {
-        display: false
+        display: false,
+        shrink: false
       },
       snackbar: {
         display: false,

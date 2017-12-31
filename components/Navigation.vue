@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout class="flex-initial">
     <!-- Tablet / Desktop -->
     <v-layout class="hidden-xs-only">
       <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
@@ -14,7 +14,7 @@
                   </span>
                 </v-avatar>
               </router-link>
-              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial" v-bind:class="{ 'white--text': shrink }">
+              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial" :class="{ 'white--text': shrink }">
                 {{ item.title }}
               </v-layout>
             </v-layout>
@@ -24,7 +24,7 @@
               <v-btn v-if="!authenticated" @click.stop="toggleSignupModal"  color="secondary">Sign up</v-btn>
               <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
               <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
-              <span class="cursor pa-3" v-bind:class="{ 'white--text': shrink }">FAQ</span>
+              <span class="cursor pa-3" :class="{ 'white--text': shrink }">FAQ</span>
             </v-layout>
           </v-flex>
         </v-layout>
@@ -34,7 +34,7 @@
 
     <!-- Mobile -->
     <v-layout class="hidden-sm-and-up">
-      <v-toolbar v-if="!displayNav" fixed app>
+      <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
         <v-layout row justify-start align-center>
           <v-flex xs4>
             <v-avatar @click="openNav" class="cyan cursor">
@@ -53,9 +53,9 @@
       <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav" app>
         <v-list>
           <v-list-tile @click="navigateTo(item.link)" v-for="item in items"  :key="item.title">
-            <v-list-tile-action>
+            <v-list-tile-avatar>
               <v-icon dark>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
+            </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
@@ -106,7 +106,7 @@ export default {
         { icon: 'remove_circle_outline', title: 'Sell', subtitle: '', link: '/sell', showSmAndUp: true, authenticated: true },
         { icon: 'account_balance', title: 'My Trades', subtitle: '', link: '/trades', showSmAndUp: true, authenticated: true },
         { icon: 'help', title: 'FAQ', subtitle: '', link: '/faq', showSmAndUp: false, authenticated: false },
-        { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings', showSmAndUp: true, authenticated: true }
+        { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings/summary', showSmAndUp: true, authenticated: true }
       ]
     }
   },

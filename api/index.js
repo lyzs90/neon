@@ -1,8 +1,10 @@
 const express = require('express')
+const helmet = require('helmet')
 const cors = require('cors')
 const admin = require('firebase-admin')
 
 // Initialize Firebase Admin
+// Note: firestore is only available on firebase-admin
 const serviceAccount = require('../sa-key.json')
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -10,15 +12,18 @@ admin.initializeApp({
 })
 global.firestore = admin.firestore()
 
-// Import Routes
-const AuthController = require('./controllers/AuthController')
+// Create express app
+const app = express()
+app.use(helmet())
 
 // Create express router
 const router = express.Router()
 
+// Import Routes
+const AuthController = require('./controllers/AuthController')
+
 // Transform req & res to have the same API as express
 // So we can use res.status() & res.json()
-const app = express()
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
   Object.setPrototypeOf(res, app.response)

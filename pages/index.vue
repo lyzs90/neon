@@ -67,7 +67,7 @@
                     <div class="headline text-xs-center">Convenient</div>
                   </v-card-title>
                   <v-card-text>
-                    No more physical meetups or hair-raising bank transfers. Swap fiat for E  ther anywhere, any time.
+                    No more physical meetups or hair-raising bank transfers. Swap fiat for Ether anywhere, any time.
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -84,10 +84,10 @@
           <div class="headline white--text mb-3 text-xs-center">Ever wondered why it is so difficult to buy and sell Ether?</div>
           <em>It's not anymore</em>
           <v-btn
-            class="blue lighten-2 mt-5"
+            class="primary mt-5"
             dark
             large
-            href="/pre-made-themes"
+            href="/"
           >
            Get Started
           </v-btn>
@@ -150,7 +150,7 @@
     </section>
 
     <!-- Footer -->
-    <v-footer class="blue darken-2 w-100">
+    <v-footer class="black w-100">
       <v-layout row wrap justify-end>
         <div class="white--text mr-3">
           neon, 2018

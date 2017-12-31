@@ -1,15 +1,10 @@
 <template>
-  <v-container fluid>
-    <v-layout>
-      <v-flex xs12 justify-center>
-        <a @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-card class="w-100">
+    <a @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+  </v-card>
 </template>
 
 <script>
-
 import { mapActions } from 'vuex'
 
 export default {

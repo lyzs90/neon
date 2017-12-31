@@ -11,6 +11,14 @@ const mutations = {
     state.nav.display = false
   },
 
+  SHRINK_NAV (state) {
+    state.nav.shrink = true
+  },
+
+  UNSHRINK_NAV (state) {
+    state.nav.shrink = false
+  },
+
   SHOW_SNACKBAR (state, payload) {
     const { color, message } = payload
     state.snackbar.display = true
