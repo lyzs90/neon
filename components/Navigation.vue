@@ -1,80 +1,82 @@
 <template>
-  <v-layout class="flex-initial">
-    <!-- Tablet / Desktop -->
-    <v-layout class="hidden-xs-only">
-      <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
+  <no-ssr>
+    <v-layout class="flex-initial">
+      <!-- Tablet / Desktop -->
+      <v-layout class="hidden-xs-only">
+        <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
 
-        <v-layout class="ml-3 mr-3">
-          <v-flex sm6>
-            <v-layout row justify-start align-center>
-              <router-link to="/" class="no-underline">
-                <v-avatar class="cyan ma-3">
-                  <span class="white--text headline small-caps">
-                    {{ userInitials }}
-                  </span>
-                </v-avatar>
-              </router-link>
-              <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial" :class="{ 'white--text': shrink }">
-                {{ item.title }}
+          <v-layout class="ml-3 mr-3">
+            <v-flex sm6>
+              <v-layout row justify-start align-center>
+                <router-link to="/" class="no-underline">
+                  <v-avatar class="cyan ma-3">
+                    <span class="white--text headline small-caps">
+                      {{ userInitials }}
+                    </span>
+                  </v-avatar>
+                </router-link>
+                <v-layout @click="navigateTo(item.link)" v-for="item in items" v-if="item.showSmAndUp && item.authenticated  === authenticated" :key="item.title" class="cursor pa-3 flex-initial" :class="{ 'white--text': shrink }">
+                  {{ item.title }}
+                </v-layout>
               </v-layout>
-            </v-layout>
-          </v-flex>
-          <v-flex sm6>
-            <v-layout row justify-end align-center>
-              <v-btn v-if="!authenticated" @click.stop="toggleSignupModal"  color="secondary">Sign up</v-btn>
-              <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
-              <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
-              <span class="cursor pa-3" :class="{ 'white--text': shrink }">FAQ</span>
-            </v-layout>
-          </v-flex>
-        </v-layout>
+            </v-flex>
+            <v-flex sm6>
+              <v-layout row justify-end align-center>
+                <v-btn v-if="!authenticated" @click.stop="toggleSignupModal"  color="secondary">Sign up</v-btn>
+                <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
+                <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
+                <span class="cursor pa-3" :class="{ 'white--text': shrink }">FAQ</span>
+              </v-layout>
+            </v-flex>
+          </v-layout>
 
-      </v-toolbar>
+        </v-toolbar>
+      </v-layout>
+
+      <!-- Mobile -->
+      <v-layout class="hidden-sm-and-up">
+        <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
+          <v-layout row justify-start align-center>
+            <v-flex xs4>
+              <v-avatar @click="openNav" class="cyan cursor">
+                <span class="white--text headline small-caps">{{ userInitials }}</span>
+              </v-avatar>
+            </v-flex>
+            <v-flex xs8>
+              <v-layout row justify-end align-center>
+                <v-btn v-if="!authenticated" @click.stop="toggleSignupModal" color="secondary">Sign up</v-btn>
+                <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
+                <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-toolbar>
+        <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav" app>
+          <v-list>
+            <v-list-tile @click="navigateTo(item.link)" v-for="item in items"  :key="item.title">
+              <v-list-tile-avatar>
+                <v-icon dark>{{ item.icon }}</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-navigation-drawer>
+      </v-layout>
+
+      <!-- LoginModal -->
+      <v-dialog v-model="displayLoginModal" max-width="500px">
+        <login-form v-on:close="toggleLoginModal"></login-form>
+      </v-dialog>
+
+      <!-- SignupModal -->
+      <v-dialog v-model="displaySignupModal" max-width="500px">
+        <signup-form v-on:close="toggleSignupModal"></signup-form>
+      </v-dialog>
     </v-layout>
-
-    <!-- Mobile -->
-    <v-layout class="hidden-sm-and-up">
-      <v-toolbar v-if="!displayNav" v-bind="{ 'dark': shrink }" fixed app>
-        <v-layout row justify-start align-center>
-          <v-flex xs4>
-            <v-avatar @click="openNav" class="cyan cursor">
-              <span class="white--text headline small-caps">{{ userInitials }}</span>
-            </v-avatar>
-          </v-flex>
-          <v-flex xs8>
-            <v-layout row justify-end align-center>
-              <v-btn v-if="!authenticated" @click.stop="toggleSignupModal" color="secondary">Sign up</v-btn>
-              <v-btn v-if="!authenticated" @click.stop="toggleLoginModal" color="primary">Log in</v-btn>
-              <v-btn v-if="authenticated" @click="logOut" color="secondary">Log out</v-btn>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-      </v-toolbar>
-      <v-navigation-drawer fixed stateless dark class="blue" v-if="displayNav" :value="displayNav" v-on-clickaway="closeNav" app>
-        <v-list>
-          <v-list-tile @click="navigateTo(item.link)" v-for="item in items"  :key="item.title">
-            <v-list-tile-avatar>
-              <v-icon dark>{{ item.icon }}</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
-    </v-layout>
-
-    <!-- LoginModal -->
-    <v-dialog v-model="displayLoginModal" max-width="500px">
-      <login-form v-on:close="toggleLoginModal"></login-form>
-    </v-dialog>
-
-    <!-- SignupModal -->
-    <v-dialog v-model="displaySignupModal" max-width="500px">
-      <signup-form v-on:close="toggleSignupModal"></signup-form>
-    </v-dialog>
-  </v-layout>
+  </no-ssr>
 </template>
 
 <script>
