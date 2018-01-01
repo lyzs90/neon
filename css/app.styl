@@ -1,20 +1,44 @@
 @require './vendor/material-icons.styl'
 @require './vendor/vuetify.styl'
 
-.flex
-  display: flex
-
-.flex-initial
-  flex: 0 1 auto
-
 .no-underline
   text-decoration: none
 
 .small-caps
   font-variant: small-caps
 
+.cursor
+  cursor: pointer
+
 .w-100
   width: 100%
 
-.cursor
-  cursor: pointer
+.h-100
+  height: 100%
+
+.vh-90
+  height: 90vh
+
+/* Flexbox */
+.row
+  display: flex
+  flex-direction: row
+
+.column
+  display: flex
+  flex-direction: column
+
+.wrap
+  flex-wrap: wrap
+
+.flex-initial
+  flex: 0 1 auto
+
+.self-center
+  align-self: center
+
+.items-center
+  align-items: center
+
+.justify-center
+  justify-content: center

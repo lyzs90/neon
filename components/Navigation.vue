@@ -108,7 +108,7 @@ export default {
         { icon: 'remove_circle_outline', title: 'Sell', subtitle: '', link: '/sell', showSmAndUp: true, authenticated: true },
         { icon: 'account_balance', title: 'My Trades', subtitle: '', link: '/trades', showSmAndUp: true, authenticated: true },
         { icon: 'help', title: 'FAQ', subtitle: '', link: '/faq', showSmAndUp: false, authenticated: false },
-        { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings/summary', showSmAndUp: true, authenticated: true }
+        { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings/profile', showSmAndUp: true, authenticated: true }
       ]
     }
   },
@@ -140,7 +140,10 @@ export default {
     }),
 
     navigateTo (link) {
-      this.closeNav()
+      if (this.$vuetify.breakpoint.xsOnly) {
+        this.closeNav()
+      }
+
       this.$router.push(link)
     },
 

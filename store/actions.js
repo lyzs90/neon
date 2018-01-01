@@ -82,7 +82,7 @@ const actions = {
     const reqID = uuidv4()
     const AUTHORIZE_URI = 'https://connect.stripe.com/oauth/authorize'
 
-    commit('TOGGLE_SPINNER')
+    commit('TOGGLE_MAIN_SPINNER')
 
     window.location = AUTHORIZE_URI + '?' + qs.stringify({
       response_type: 'code',

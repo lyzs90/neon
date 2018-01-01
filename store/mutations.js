@@ -3,6 +3,10 @@ const mutations = {
     state.user = payload
   },
 
+  SET_STRIPE_ACCOUNT (state, payload) {
+    state.stripe = payload
+  },
+
   OPEN_NAV (state) {
     state.nav.display = true
   },
@@ -30,8 +34,12 @@ const mutations = {
     state.snackbar.display = false
   },
 
-  TOGGLE_SPINNER (state) {
-    state.spinner.display = !state.spinner.display
+  TOGGLE_MAIN_SPINNER (state) {
+    state.mainSpinner.display = !state.mainSpinner.display
+  },
+
+  TOGGLE_SETTINGS_SPINNER (state) {
+    state.settingsSpinner.display = !state.settingsSpinner.display
   }
 }
 

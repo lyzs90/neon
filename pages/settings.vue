@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid :class="{'ma-3': $vuetify.breakpoint.smAndUp}">
+  <v-container fluid :class="{'ma-1': $vuetify.breakpoint.smAndUp}">
     <v-layout row wrap>
-      <v-flex xs12 sm3>
-        <v-card class="w-100">
+      <v-flex xs12 sm3 :class="{'ml-3':$vuetify.breakpoint.smAndUp}">
+        <v-card class="w-100" height="245">
           <v-list class="pa-0">
             <template v-for="(item, index) in items">
               <v-list-tile ripple @click="navigateTo(item)" :key="index" :class="{ 'blue': item.link === $route.path }">
@@ -15,26 +15,39 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm9 mt-3 justify-center>
-        <nuxt-child />
+      <v-flex xs12 sm8 justify-center :class="{'mt-3': $vuetify.breakpoint.xsOnly, 'ml-5':$vuetify.breakpoint.smAndUp}">
+        <!-- Child Content -->
+        <nuxt-child v-if="!settingsSpinner.display" />
+
+        <!-- Settings Spinner -->
+        <v-layout v-if="settingsSpinner.display" row justify-center align-center vh-90>
+          <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" color="primary"></v-progress-circular>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   data () {
     return {
       items: [
-        { title: 'Summary', link: '/settings/summary' },
+        { title: 'Profile', link: '/settings/profile' },
         { title: 'Stripe Account', link: '/settings/stripe' },
         { title: 'Wallet', link: '/settings/wallet' },
         { title: 'Password', link: '/settings/password' },
         { title: '2FA', link: '/settings/2fa' }
       ]
     }
+  },
+
+  computed: {
+    ...mapState([
+      'settingsSpinner'
+    ])
   },
 
   methods: {

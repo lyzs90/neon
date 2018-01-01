@@ -1,12 +1,17 @@
 <template>
   <v-app light>
+    <!-- Nav -->
     <navigation :display="nav.display" :shrink="nav.shrink"></navigation>
     <v-content>
       <snackbar :display="snackbar.display" :color="snackbar.color" :text="snackbar.message"></snackbar>
-      <v-layout v-if="spinner.display" row justify-center>
+
+      <!-- Spinner -->
+      <v-layout v-if="mainSpinner.display" row justify-center align-center h-100>
         <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" color="primary"></v-progress-circular>
       </v-layout>
-      <nuxt v-if="!spinner.display" />
+
+      <!-- View -->
+      <nuxt v-if="!mainSpinner.display" />
     </v-content>
   </v-app>
 </template>
@@ -27,7 +32,7 @@ export default {
     ...mapState([
       'nav',
       'snackbar',
-      'spinner'
+      'mainSpinner'
     ])
   },
 

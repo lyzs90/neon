@@ -8,6 +8,7 @@ const store = () => {
   return new Vuex.Store({
     state: {
       user: {},
+      stripe: {},
       nav: {
         display: false,
         shrink: false
@@ -17,7 +18,10 @@ const store = () => {
         color: '',
         message: ''
       },
-      spinner: {
+      mainSpinner: {
+        display: false
+      },
+      settingsSpinner: {
         display: false
       }
     },

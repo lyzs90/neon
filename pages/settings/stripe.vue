@@ -1,13 +1,90 @@
 <template>
   <v-card class="w-100">
-    <a @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+    <v-card-title primary-title>
+      <div>
+        <h3 class="headline mb-0">Stripe Account</h3>
+      </div>
+    </v-card-title>
+    <v-list three-line>
+
+      <!-- Currency -->
+      <v-list-tile>
+        <v-list-tile-action>
+          <v-icon color="blue">attach_money</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title class="small-caps">{{ stripe.default_currency }}</v-list-tile-title>
+          <v-list-tile-sub-title>Default Currency</v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action>
+          <v-btn icon ripple>
+            <v-icon>edit</v-icon>
+          </v-btn>
+        </v-list-tile-action>
+      </v-list-tile>
+
+      <v-divider inset></v-divider>
+
+      <!-- Status -->
+      <v-list-tile>
+        <v-list-tile-action>
+          <v-icon color="blue">offline_pin</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title :class="connectedClass">{{ stripe.id ? 'Connected' : 'Not Connected' }}</v-list-tile-title>
+          <v-list-tile-sub-title>{{ stripe.id ? 'Ensure all transactions are complete before disconnecting' : 'You must have a Stripe account in order to swap currencies' }}</v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action v-if="$vuetify.breakpoint.smAndUp" class="justify-center">
+          <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+          <v-btn v-if="stripe.id" color="error" class="self-center">Disconnect</v-btn>
+        </v-list-tile-action>
+      </v-list-tile>
+
+      <v-layout v-if="$vuetify.breakpoint.xsOnly" row justify-center>
+        <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+        <v-btn v-if="stripe.id" color="error" class="self-center">Disconnect</v-btn>
+      </v-layout>
+
+    </v-list>
   </v-card>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { isEmpty } from 'lodash'
 
 export default {
+  asyncData ({ app, store }) {
+    if (isEmpty(store.state.stripe)) {
+      store.commit('TOGGLE_SETTINGS_SPINNER')
+
+      return app.$axios.$get('/account', {
+        params: {
+          user: store.getters.userID
+        }
+      })
+        .then(account => {
+          store.commit('SET_STRIPE_ACCOUNT', account)
+          store.commit('TOGGLE_SETTINGS_SPINNER')
+          return null
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
+    return null
+  },
+  computed: {
+    ...mapState([
+      'stripe'
+    ]),
+
+    connectedClass () {
+      return this.stripe.id ? 'green--text' : 'red--text'
+    }
+  },
+
   methods: {
     ...mapActions({
       authorizeStripe: 'authorizeStripe'
