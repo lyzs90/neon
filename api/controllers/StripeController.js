@@ -7,13 +7,14 @@ module.exports = {
   /**
    * @api {GET} /api/oauth/callback
    * @apiDescription Obtain user access_token once authorization from Stripe has
-   * been granted
+   * been granted. This endpoint is used as the Stripe redirect_url.
    *
-   * @apiParam (query)  {String}  code  Stripe authorization code
+   * @apiParam (query)  {String}  code    Stripe authorization code
+   * @apiParam (query)  {String}  state   CSRF token with format <userID:uuid>
    */
   stripeOauthCallback: (req, res) => {
     const tag = `${req.uid} StripeController.stripeOauthCallback:`
-    const code = process.env.NODE_ENV === 'production' ? req.query.code : process.env.DEV_STRIPE_AUTH_CODE
+    const code = req.query.code
     // State is userID:uuid. FIXME: how to use state to prevent CSRF?
     const state = req.query.state
     const userID = state.split(':')[0]
@@ -47,6 +48,45 @@ module.exports = {
         winston.info(tag, `Oauth info saved to db`)
         return res.redirect(process.env.BASE_URL)
       })
+      .catch(err => {
+        winston.error(tag, err)
+        return res.status(500).json({ message: 'Server Error' })
+      })
+  },
+
+  /**
+   * @api {POST} /api/oauth/deauthorize
+   * @apiDescription Revoke access to a user's Stripe account
+   *
+   * @apiParam (body)  {String}  stripe_user_id  Stripe account to disconnect
+   */
+  deauthorizeStripeAccount: (req, res) => {
+    const tag = `${req.uid} StripeController.deauthorizeStripeAccount:`
+    const stripeID = req.body.stripe_user_id
+
+    /*
+    return request.post('https://connect.stripe.com/oauth/deauthorize', {
+      client_id: process.env.STRIPE_CLIENT_ID,
+      stripe_user_id: stripeID
+    })
+     */
+    return firestore.collection('accounts').where('stripe_user_id', '==', stripeID).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          return null
+        }
+
+        snapshot.forEach(doc => {
+          doc.ref.delete()
+        })
+      })
+      .then(() => {
+        return res.end()
+      })
+      .catch(err => {
+        winston.error(tag, err)
+        return res.status(500).json({ message: 'Server Error' })
+      })
   },
 
   /**
@@ -63,7 +103,7 @@ module.exports = {
       return userID ? firestore.collection('accounts').where('user_id', '==', userID).get() : null
     })
       .then(snapshot => {
-        if (_.isNull(snapshot) && _.isEmpty(snapshot.docs)) {
+        if (snapshot.empty) {
           throw new Error('AccountNotFound')
         }
 
@@ -74,13 +114,15 @@ module.exports = {
         return result
       })
       .then(({ stripe_user_id: accountID, access_token: accessToken }) => {
-        // Makes request on behalf of connected account
-        const stripe = require('stripe')(process.env.STRIPE_SECRET)
-        return stripe.accounts.retrieve(accountID)
+        // Makes request on behalf of connected account. Extra check to prevent root account details from being retrieved
+        if (_.isNil(accountID)) {
+          const stripe = require('stripe')(process.env.STRIPE_SECRET)
+          return stripe.accounts.retrieve(accountID)
+        }
 
         /* Makes request as the connected account
         var stripe = require('stripe')(accessToken);
-        return stripe.accounts.retrieve(accountID)
+        return stripe.accounts.retrieve()
         */
       })
       .then(account => {
@@ -88,6 +130,11 @@ module.exports = {
       })
       .catch({ message: 'AccountNotFound' }, err => {
         winston.error(tag, err)
+        return res.status(404).json({ message: 'Stripe account not found' })
+      })
+      .catch(err => {
+        winston.error(tag, err)
+        return res.status(500).json({ message: 'Server Error' })
       })
   }
 }

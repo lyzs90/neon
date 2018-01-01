@@ -51,6 +51,7 @@ const corsOptions = {
 }
 app.options('/oauth/callback', cors(corsOptions)) // Enable pre-flight request
 router.get('/oauth/callback', cors(corsOptions), StripeController.stripeOauthCallback)
+router.post('/oauth/deauthorize', cors(corsOptions), StripeController.deauthorizeStripeAccount)
 router.get('/account', StripeController.getStripeAccount)
 
 // Export the server middleware

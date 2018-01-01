@@ -7,8 +7,39 @@
     </v-card-title>
     <v-list three-line>
 
-      <!-- Currency -->
+      <!-- Status -->
       <v-list-tile>
+        <v-list-tile-action>
+          <v-icon color="blue">offline_pin</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title :class="connectedClass">{{ stripe.id ? 'Connected' : 'Not Connected' }}</v-list-tile-title>
+          <v-list-tile-sub-title>{{ stripe.id ? 'Ensure all transactions are complete before disconnecting' : 'You must have a Stripe account in order to swap currencies' }}</v-list-tile-sub-title>
+        </v-list-tile-content>
+
+        <!-- Tablet / Desktop -->
+        <v-list-tile-action v-if="$vuetify.breakpoint.smAndUp" class="justify-center">
+          <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+          <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+            {{ buttonSpinner.display ? '' : 'Disconnect' }}
+            <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white"></v-progress-circular>
+          </v-btn>
+        </v-list-tile-action>
+      </v-list-tile>
+
+      <!-- Mobile -->
+      <v-layout v-if="$vuetify.breakpoint.xsOnly" class="mb-3" row justify-center>
+        <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+        <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+          {{ buttonSpinner.display ? '' : 'Disconnect' }}
+          <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white"></v-progress-circular>
+        </v-btn>
+      </v-layout>
+
+      <v-divider v-if="stripe.id"></v-divider>
+
+      <!-- Currency -->
+      <v-list-tile v-if="stripe.id">
         <v-list-tile-action>
           <v-icon color="blue">attach_money</v-icon>
         </v-list-tile-action>
@@ -22,28 +53,6 @@
           </v-btn>
         </v-list-tile-action>
       </v-list-tile>
-
-      <v-divider inset></v-divider>
-
-      <!-- Status -->
-      <v-list-tile>
-        <v-list-tile-action>
-          <v-icon color="blue">offline_pin</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title :class="connectedClass">{{ stripe.id ? 'Connected' : 'Not Connected' }}</v-list-tile-title>
-          <v-list-tile-sub-title>{{ stripe.id ? 'Ensure all transactions are complete before disconnecting' : 'You must have a Stripe account in order to swap currencies' }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action v-if="$vuetify.breakpoint.smAndUp" class="justify-center">
-          <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-          <v-btn v-if="stripe.id" color="error" class="self-center">Disconnect</v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
-
-      <v-layout v-if="$vuetify.breakpoint.xsOnly" row justify-center>
-        <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-        <v-btn v-if="stripe.id" color="error" class="self-center">Disconnect</v-btn>
-      </v-layout>
 
     </v-list>
   </v-card>
@@ -65,11 +74,15 @@ export default {
       })
         .then(account => {
           store.commit('SET_STRIPE_ACCOUNT', account)
-          store.commit('TOGGLE_SETTINGS_SPINNER')
+
           return null
         })
         .catch(err => {
           console.log(err)
+          store.commit('SET_STRIPE_ACCOUNT', {})
+        })
+        .finally(() => {
+          store.commit('TOGGLE_SETTINGS_SPINNER')
         })
     }
 
@@ -77,7 +90,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'stripe'
+      'stripe',
+      'buttonSpinner'
     ]),
 
     connectedClass () {
@@ -86,9 +100,10 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      authorizeStripe: 'authorizeStripe'
-    })
+    ...mapActions([
+      'authorizeStripe',
+      'deauthorizeStripe'
+    ])
   }
 }
 </script>

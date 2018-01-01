@@ -90,6 +90,30 @@ const actions = {
       client_id: process.env.STRIPE_CLIENT_ID,
       state: `${userID}:${reqID}`
     })
+  },
+
+  deauthorizeStripe ({ commit, getters }) {
+    const stripeID = getters.stripeID
+    commit('TOGGLE_BUTTON_SPINNER')
+
+    return this.$axios.$post('/oauth/deauthorize', { stripe_user_id: stripeID })
+      .then(() => {
+        commit('SET_STRIPE_ACCOUNT', {})
+        commit('SHOW_SNACKBAR', {
+          color: 'success',
+          message: 'Disconnected from Stripe'
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        commit('SHOW_SNACKBAR', {
+          color: 'error',
+          message: 'Server Error. Please try again later.'
+        })
+      })
+      .finally(() => {
+        commit('TOGGLE_BUTTON_SPINNER')
+      })
   }
 }
 

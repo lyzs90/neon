@@ -23,6 +23,9 @@ const store = () => {
       },
       settingsSpinner: {
         display: false
+      },
+      buttonSpinner: {
+        display: false
       }
     },
     getters,

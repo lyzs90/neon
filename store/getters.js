@@ -14,6 +14,10 @@ const getters = {
 
   userID: state => {
     return state.user.uid
+  },
+
+  stripeID: state => {
+    return state.stripe.id
   }
 }
 

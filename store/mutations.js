@@ -40,6 +40,10 @@ const mutations = {
 
   TOGGLE_SETTINGS_SPINNER (state) {
     state.settingsSpinner.display = !state.settingsSpinner.display
+  },
+
+  TOGGLE_BUTTON_SPINNER (state) {
+    state.buttonSpinner.display = !state.buttonSpinner.display
   }
 }
 

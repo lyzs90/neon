@@ -105,12 +105,6 @@ module.exports = {
     '@nuxtjs/axios' // Axios is used on the client. Request is used on the server
   ],
 
-  axios: {
-    errorHandler (errorReason, { error }) {
-      error(errorReason)
-    }
-  },
-
   /**
    * Plugins
    */
