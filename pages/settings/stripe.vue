@@ -22,7 +22,7 @@
           <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
           <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
             {{ buttonSpinner.display ? '' : 'Disconnect' }}
-            <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white"></v-progress-circular>
+            <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
           </v-btn>
         </v-list-tile-action>
       </v-list-tile>
@@ -32,7 +32,7 @@
         <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
         <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
           {{ buttonSpinner.display ? '' : 'Disconnect' }}
-          <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white"></v-progress-circular>
+          <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
         </v-btn>
       </v-layout>
 

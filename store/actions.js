@@ -88,7 +88,8 @@ const actions = {
       response_type: 'code',
       scope: 'read_write',
       client_id: process.env.STRIPE_CLIENT_ID,
-      state: `${userID}:${reqID}`
+      state: `${userID}:${reqID}`,
+      redirect_uri: `${process.env.baseUrl}/api/oauth/callback`
     })
   },
 
