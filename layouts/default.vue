@@ -6,7 +6,7 @@
       <snackbar :display="snackbar.display" :color="snackbar.color" :text="snackbar.message"></snackbar>
 
       <!-- Spinner -->
-      <v-layout v-if="mainSpinner.display" row justify-center align-center h-100>
+      <v-layout v-if="mainSpinner.display" row justify-center align-center class="h-100">
         <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" color="primary"></v-progress-circular>
       </v-layout>
 

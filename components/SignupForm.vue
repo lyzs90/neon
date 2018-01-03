@@ -1,9 +1,9 @@
 <template>
-  <v-card class="pa-3">
-    <v-card-title>
-      Sign up
-    </v-card-title>
-    <v-form v-model="valid" ref="form" lazy-validation>
+  <v-card>
+    <v-toolbar color="grey lighten-1" dark>
+      <v-toolbar-title>Sign up</v-toolbar-title>
+    </v-toolbar>
+    <v-form v-model="valid" ref="form" lazy-validation class="pa-3">
       <v-text-field
         name="email"
         label="Email"

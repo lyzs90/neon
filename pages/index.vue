@@ -3,13 +3,13 @@
 
     <!-- Hero -->
     <section class="w-100">
-      <v-parallax :src="require('../assets/hero.jpeg')" height="600">
+      <v-parallax :src="require('../assets/grayscale.png')" height="600">
         <v-layout column justify-center align-center>
           <logo/>
-          <h1 class="title white--text">
+          <h1 class="title grey--text text--darken-1">
             A p2p ether portal
           </h1>
-          <h2 class="subtitle white--text">
+          <h2 class="subtitle grey--text text--darken-1">
             neon
           </h2>
         </v-layout>
@@ -79,10 +79,10 @@
 
     <!-- Hero 2 -->
     <section class="w-100">
-      <v-parallax :src="require('../assets/section.jpg')" height="380">
+      <v-parallax :src="require('../assets/grayscale.png')" height="380">
         <v-layout column align-center justify-center>
-          <div class="headline white--text mb-3 text-xs-center">Ever wondered why it is so difficult to buy and sell Ether?</div>
-          <em>It's not anymore</em>
+          <div class="headline grey--text text--darken-1 mb-3 text-xs-center">Ever wondered why it is so difficult to buy and sell Ether?</div>
+          <em class="grey--text text--darken-1">It's not anymore</em>
           <v-btn
             class="primary mt-5"
             dark

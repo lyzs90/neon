@@ -1,4 +1,4 @@
-# ezswap
+# neon
 
 > The frontend
 

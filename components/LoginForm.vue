@@ -1,9 +1,9 @@
 <template>
-  <v-card class="pa-3">
-    <v-card-title>
-      Log in
-    </v-card-title>
-    <v-form v-model="valid">
+  <v-card>
+    <v-toolbar color="blue lighten-1" dark>
+      <v-toolbar-title>Log in</v-toolbar-title>
+    </v-toolbar>
+    <v-form v-model="valid" class="pa-3">
       <v-text-field
         name="email"
         label="Email"
