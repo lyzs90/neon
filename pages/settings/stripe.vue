@@ -13,14 +13,14 @@
           <v-icon color="blue">offline_pin</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title :class="connectedClass">{{ stripe.id ? 'Connected' : 'Not Connected' }}</v-list-tile-title>
-          <v-list-tile-sub-title>{{ stripe.id ? 'Ensure all transactions are complete before disconnecting' : 'You must have a Stripe account in order to swap currencies' }}</v-list-tile-sub-title>
+          <v-list-tile-title :class="connectedClass">{{ stripe.account.id ? 'Connected' : 'Not Connected' }}</v-list-tile-title>
+          <v-list-tile-sub-title>{{ stripe.account.id ? 'Ensure all transactions are complete before disconnecting' : 'You must have a Stripe account in order to swap currencies' }}</v-list-tile-sub-title>
         </v-list-tile-content>
 
         <!-- Tablet / Desktop -->
         <v-list-tile-action v-if="$vuetify.breakpoint.smAndUp" class="justify-center">
-          <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-          <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+          <a v-if="!stripe.account.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+          <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
             {{ buttonSpinner.display ? '' : 'Disconnect' }}
             <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
           </v-btn>
@@ -29,22 +29,22 @@
 
       <!-- Mobile -->
       <v-layout v-if="$vuetify.breakpoint.xsOnly" class="mb-3" row justify-center>
-        <a v-if="!stripe.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-        <v-btn v-if="stripe.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+        <a v-if="!stripe.account.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
+        <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
           {{ buttonSpinner.display ? '' : 'Disconnect' }}
           <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
         </v-btn>
       </v-layout>
 
-      <v-divider v-if="stripe.id"></v-divider>
+      <v-divider v-if="stripe.account.id"></v-divider>
 
       <!-- Currency -->
-      <v-list-tile v-if="stripe.id">
+      <v-list-tile v-if="stripe.account.id">
         <v-list-tile-action>
           <v-icon color="blue">attach_money</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title class="small-caps">{{ stripe.default_currency }}</v-list-tile-title>
+          <v-list-tile-title class="small-caps">{{ stripe.account.default_currency }}</v-list-tile-title>
           <v-list-tile-sub-title>Default Currency</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
@@ -64,7 +64,7 @@ import { isEmpty } from 'lodash'
 
 export default {
   asyncData ({ app, store }) {
-    if (isEmpty(store.state.stripe)) {
+    if (isEmpty(store.state.stripe.account)) {
       store.commit('TOGGLE_SETTINGS_SPINNER')
 
       return app.$axios.$get('/account', {
@@ -95,7 +95,7 @@ export default {
     ]),
 
     connectedClass () {
-      return this.stripe.id ? 'green--text' : 'red--text'
+      return this.stripe.account.id ? 'green--text' : 'red--text'
     }
   },
 

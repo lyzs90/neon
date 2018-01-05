@@ -1,12 +1,4 @@
 const mutations = {
-  SET_USER (state, payload) {
-    state.user = payload
-  },
-
-  SET_STRIPE_ACCOUNT (state, payload) {
-    state.stripe = payload
-  },
-
   OPEN_NAV (state) {
     state.nav.display = true
   },

@@ -54,6 +54,13 @@ router.get('/oauth/callback', cors(corsOptions), StripeController.stripeOauthCal
 router.post('/oauth/deauthorize', cors(corsOptions), StripeController.deauthorizeStripeAccount)
 router.get('/account', StripeController.getStripeAccount)
 
+// Buy Offer
+const BuyController = require('./controllers/BuyController')
+router.post('/buy', BuyController.create)
+router.get('/buy', BuyController.findAll)
+router.get('/buy/:id', BuyController.findOne)
+router.put('/buy/:id/cancel', BuyController.cancel)
+
 // Export the server middleware
 module.exports = {
   path: '/api',

@@ -16,7 +16,7 @@
         </v-card-title>
         <v-spacer></v-spacer>
         <v-card-title class="white--text pl-5 pt-5">
-          <div class="display-1 pl-5 pt-5">{{ user.displayName }}</div>
+          <div class="display-1 pl-5 pt-5">{{ user.account.displayName }}</div>
         </v-card-title>
       </v-layout>
     </v-card-media>
@@ -27,7 +27,7 @@
           <v-icon color="blue">mail</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>{{ user.email }}</v-list-tile-title>
+          <v-list-tile-title>{{ user.account.email }}</v-list-tile-title>
           <v-list-tile-sub-title>Email</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
@@ -44,7 +44,7 @@
           <v-icon color="blue">phone</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>{{ user.phoneNumber }}</v-list-tile-title>
+          <v-list-tile-title>{{ user.account.phoneNumber }}</v-list-tile-title>
           <v-list-tile-sub-title>Mobile</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>

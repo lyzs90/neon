@@ -4,11 +4,14 @@ import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 
+import user from './modules/user'
+import stripe from './modules/stripe'
+import offers from './modules/offers'
+
 const store = () => {
   return new Vuex.Store({
+    // Global Store
     state: {
-      user: {},
-      stripe: {},
       nav: {
         display: false,
         shrink: false
@@ -30,7 +33,15 @@ const store = () => {
     },
     getters,
     actions,
-    mutations
+    mutations,
+
+    // Namespaced Stores
+    // Note: Actions, mutations and getters inside modules are still registered under the global namespace. unless pass `namespaced : true` in their export obj
+    modules: {
+      user,
+      stripe,
+      offers
+    }
   })
 }
 

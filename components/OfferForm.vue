@@ -26,13 +26,13 @@
       </v-tooltip>
     </v-toolbar>
 
-    <v-form v-model="valid" class="pa-3">
+    <v-form v-model="valid" ref="form" class="pa-3">
 
-      <!-- User ID -->
+      <!-- Offeree ID -->
       <v-layout row justify-start align-baseline>
         <v-text-field
           label="User ID (optional)"
-          v-model="userID"
+          v-model="offereeID"
           hint="Send a private offer to someone you know"
         ></v-text-field>
       </v-layout>
@@ -89,21 +89,26 @@
         ></v-text-field>
       </v-layout>
 
-      <v-btn class="right ma-3" color="primary" @click.native="submit">Submit</v-btn>
+      <v-btn class="right ma-3 btn__offer" color="primary" @click.native="submit" :disabled="!valid">
+        {{ buttonSpinner.display ? '' : 'Submit' }}
+        <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
+      </v-btn>
     </v-form>
   </v-card>
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { extend } from 'lodash'
 
 export default {
   data () {
     return {
+      valid: false,
       marketPrice: 698,
 
-      // User ID
-      userID: '',
+      // Offeree ID
+      offereeID: '',
 
       // Offer Type
       offerItems: [
@@ -113,7 +118,6 @@ export default {
       offerSelect: 'Buy Ether',
 
       // Quantity
-      valid: false,
       units: '0.0000000000',
       quantityRules: [
         (v) => !!v || 'No. of units is required',
@@ -147,6 +151,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'buttonSpinner'
+    ]),
+
     totalPrice: {
       get: function () {
         if (parseInt(this.units) === 0 || parseInt(this.unitPrice) === 0) {
@@ -165,7 +173,8 @@ export default {
 
   methods: {
     ...mapActions({
-      emailLogin: 'signInWithEmail'
+      emailLogin: 'signInWithEmail',
+      createOffer: 'createOffer'
     }),
 
     ...mapMutations({
@@ -203,10 +212,21 @@ export default {
     },
 
     submit () {
-      this.showSnackbar({
-        color: 'success',
-        message: 'Your offer has been placed!'
-      })
+      if (this.$refs.form.validate()) {
+        const payload = {
+          offer_type: this.offerSelect,
+          quantity: this.units,
+          unit_price: this.unitPrice,
+          duration: this.duration,
+          total_price: this.totalPrice
+        }
+
+        if (this.offereeID !== '') {
+          extend(payload, { offeree_id: this.offereeID })
+        }
+
+        return this.createOffer(payload)
+      }
     }
   }
 }
