@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 const mutations = {
   OPEN_NAV (state) {
     state.nav.display = true
@@ -36,6 +38,19 @@ const mutations = {
 
   TOGGLE_BUTTON_SPINNER (state) {
     state.buttonSpinner.display = !state.buttonSpinner.display
+  },
+
+  SET_LISTENER (state, { name, unsubscribe }) {
+    state.listeners = {
+      ...state.listeners,
+      [name]: {
+        unsubscribe
+      }
+    }
+  },
+
+  REMOVE_LISTENER (state, name) {
+    state.listeners = omit(state.listeners, name)
   }
 }
 

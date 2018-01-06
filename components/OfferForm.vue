@@ -1,5 +1,5 @@
 <template>
-  <v-card class="card__offer">
+  <v-card class="w-100">
     <v-toolbar color="grey lighten-1" dark>
 
       <!-- Offer Type -->
@@ -178,7 +178,8 @@ export default {
     }),
 
     ...mapMutations({
-      showSnackbar: 'SHOW_SNACKBAR'
+      showSnackbar: 'SHOW_SNACKBAR',
+      setPendingOffer: 'SET_PENDING_OFFER'
     }),
 
     selectOfferOption (item) {
@@ -226,6 +227,9 @@ export default {
         }
 
         return this.createOffer(payload)
+          .then(() => {
+            this.$emit('close')
+          })
       }
     }
   }
@@ -233,10 +237,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.card__offer
-  max-width: 500px
-  width: 100%
-
 .btn__offer
   width: 105px
 </style>

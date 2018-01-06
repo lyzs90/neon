@@ -1,12 +1,28 @@
-import { extend, omit } from 'lodash'
+import { some, extend, omit } from 'lodash'
 
 const state = {
+  pending: [],
+  completed: []
 }
 
 const getters = {
 }
 
 const mutations = {
+  SET_PENDING_OFFERS (state, offers) {
+    state.pending = offers
+  },
+
+  SET_PENDING_OFFER (state, offer) {
+    if (some(state.pending, { id: offer.id })) {
+      return null
+    }
+
+    state.pending = [
+      ...state.pending,
+      offer
+    ]
+  }
 }
 
 const actions = {

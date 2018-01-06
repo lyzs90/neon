@@ -67,12 +67,12 @@
       </v-layout>
 
       <!-- LoginModal -->
-      <v-dialog v-model="displayLoginModal" max-width="500px">
+      <v-dialog v-model="displayLoginModal" max-width="500">
         <login-form v-on:close="toggleLoginModal"></login-form>
       </v-dialog>
 
       <!-- SignupModal -->
-      <v-dialog v-model="displaySignupModal" max-width="500px">
+      <v-dialog v-model="displaySignupModal" max-width="500">
         <signup-form v-on:close="toggleSignupModal"></signup-form>
       </v-dialog>
     </v-layout>
@@ -106,7 +106,7 @@ export default {
         { icon: 'home', title: 'Home', subtitle: '', link: '/', showSmAndUp: false, authenticated: false },
         { icon: 'add_circle_outline', title: 'Buy', subtitle: '', link: '/buy', showSmAndUp: true, authenticated: true },
         { icon: 'remove_circle_outline', title: 'Sell', subtitle: '', link: '/sell', showSmAndUp: true, authenticated: true },
-        { icon: 'account_balance', title: 'My Trades', subtitle: '', link: '/trades', showSmAndUp: true, authenticated: true },
+        { icon: 'account_balance', title: 'My Offers', subtitle: '', link: '/offers', showSmAndUp: true, authenticated: true },
         { icon: 'help', title: 'FAQ', subtitle: '', link: '/faq', showSmAndUp: false, authenticated: false },
         { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings/profile', showSmAndUp: true, authenticated: true }
       ]

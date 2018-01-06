@@ -29,7 +29,8 @@ const store = () => {
       },
       buttonSpinner: {
         display: false
-      }
+      },
+      listeners: {}
     },
     getters,
     actions,

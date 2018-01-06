@@ -20,7 +20,7 @@
         <!-- Tablet / Desktop -->
         <v-list-tile-action v-if="$vuetify.breakpoint.smAndUp" class="justify-center">
           <a v-if="!stripe.account.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-          <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+          <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn--normal">
             {{ buttonSpinner.display ? '' : 'Disconnect' }}
             <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
           </v-btn>
@@ -30,7 +30,7 @@
       <!-- Mobile -->
       <v-layout v-if="$vuetify.breakpoint.xsOnly" class="mb-3" row justify-center>
         <a v-if="!stripe.account.id" @click="authorizeStripe" class="stripe-connect"><span>Connect with Stripe</span></a>
-        <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn-width">
+        <v-btn v-if="stripe.account.id" @click="deauthorizeStripe" color="error" class="self-center btn--normal">
           {{ buttonSpinner.display ? '' : 'Disconnect' }}
           <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
         </v-btn>
@@ -88,6 +88,7 @@ export default {
 
     return null
   },
+
   computed: {
     ...mapState([
       'stripe',

@@ -18,6 +18,10 @@ module.exports = {
   create: (req, res) => {
     const tag = `${req.uid} BuyController.create:`
 
+    _.extend(req.body, {
+      status: 'pending'
+    })
+
     return firestore.collection('buy_offers').doc().set(req.body)
       .then(() => {
         winston.info(tag, `Buy offer created`)
@@ -33,11 +37,33 @@ module.exports = {
    * @api {GET} /api/buy
    * @apiDescription Get all active buy offers
    *
-   * @apiParam (query) {String}  [user_id]        ID of user to filter on
+   * @apiParam (query) {String}  user         ID of user to filter on
    */
   findAll: (req, res) => {
     const tag = `${req.uid} BuyController.findAll:`
-    const { user_id } = req.query
+    const userID = req.query.user
+
+    return Promise.try(() => {
+      return userID ? firestore.collection('buy_offers').where('user_id', '==', userID).get() : null
+    })
+      .then(snapshot => {
+        if (snapshot.empty) {
+          return []
+        }
+
+        const result = []
+        snapshot.forEach(doc => {
+          result.push(doc.data())
+        })
+        return result
+      })
+      .then(offers => {
+        return res.send(offers)
+      })
+      .catch(err => {
+        winston.error(tag, err)
+        return res.status(500).json({ message: 'Server Error' })
+      })
   },
 
   /**

@@ -1,4 +1,6 @@
 import firebase from 'firebase'
+import 'firebase/auth'
+import 'firebase/firestore'
 
 // Initialize Firebase
 const config = {
@@ -10,7 +12,12 @@ const config = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID
 }
 
-const fb = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app()
+if (!firebase.apps.length) {
+  firebase.initializeApp(config)
+} else {
+  firebase.app()
+}
 
 export const auth = firebase.auth()
-export default fb
+export const db = firebase.firestore()
+export default firebase
