@@ -14,6 +14,8 @@ module.exports = {
    * @apiParam (body)  {Number}  unit_price     Price per unit
    * @apiParam (body)  {Number}  duration       Offer duration in minutes
    * @apiParam (body)  {Number}  total_price    Total price before fees
+   *
+   * @apiSuccess (201) - Offer created
    */
   create: (req, res) => {
     const tag = `${req.uid} BuyController.create:`
@@ -38,6 +40,8 @@ module.exports = {
    * @apiDescription Get all active buy offers
    *
    * @apiParam (query) {String}  user         ID of user to filter on
+   *
+   * @apiSuccess (200) {Object[]}   Array of buy offers created by the user
    */
   findAll: (req, res) => {
     const tag = `${req.uid} BuyController.findAll:`

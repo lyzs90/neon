@@ -1,6 +1,6 @@
 <template>
   <v-card class="w-100">
-    <v-card-media :src="require('../../assets/ali.png')" height="300px">
+    <v-card-media :src="require('~/assets/ali.png')" height="300px">
       <v-layout column class="media">
         <v-card-title>
           <v-btn dark icon>
@@ -55,17 +55,47 @@
       </v-list-tile>
 
     </v-list>
+
+    <v-btn @click="updateProfile">Update Profile</v-btn>
   </v-card>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+
+import { auth } from '~/services/firebaseService'
 
 export default {
   computed: {
     ...mapState([
       'user'
     ])
+  },
+
+  methods: {
+    ...mapMutations({
+      showSnackbar: 'SHOW_SNACKBAR'
+    }),
+
+    updateProfile () {
+      const user = auth.currentUser
+      return user.updateProfile({
+        photoURL: 'test'
+      })
+        .then(() => {
+          this.showSnackbar({
+            color: 'success',
+            message: 'Profile updated!'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          this.showSnackbar({
+            color: 'error',
+            message: 'Server error'
+          })
+        })
+    }
   }
 }
 </script>

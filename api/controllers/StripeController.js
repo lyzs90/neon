@@ -59,6 +59,8 @@ module.exports = {
    * @apiDescription Revoke access to a user's Stripe account
    *
    * @apiParam (body)  {String}  stripe_user_id  Stripe account to disconnect
+   *
+   * @apiSuccess (200) - Stripe account deauthorized
    */
   deauthorizeStripeAccount: (req, res) => {
     const tag = `${req.uid} StripeController.deauthorizeStripeAccount:`
@@ -90,14 +92,17 @@ module.exports = {
   },
 
   /**
-   * @api {GET} /api/account
-   * @apiDescription Get user's oauth credentials from db
+   * @api {GET} /api/account/:id
+   * @apiDescription Get user's Stripe oauth credentials from db
    *
-   * @apiParam (query)  {String}  user  User ID
+   * @apiParam (params)  {String}  id  User ID
+   *
+   * @apiSuccess (200) {Object}  Stripe account object
+   * @apiError (404) AccountNotFound  Account does not exist
    */
   getStripeAccount: (req, res) => {
     const tag = `${req.uid} StripeController.getStripeAccount:`
-    const userID = req.query.user
+    const userID = req.params.id
 
     return Promise.try(() => {
       return userID ? firestore.collection('accounts').where('user_id', '==', userID).get() : null

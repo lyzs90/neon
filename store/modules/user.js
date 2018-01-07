@@ -19,6 +19,10 @@ const getters = {
 
   userID: state => {
     return state.account.uid
+  },
+
+  userImage: state => {
+    return state.account.photoURL
   }
 }
 

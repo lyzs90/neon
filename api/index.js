@@ -10,9 +10,11 @@ const admin = require('firebase-admin')
 const serviceAccount = require('../sa-key.json')
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.DATABASE_URL
+  databaseURL: process.env.DATABASE_URL,
+  storageBucket: process.env.STORAGE_BUCKET
 })
 global.firestore = admin.firestore()
+global.storage = admin.storage()
 
 /**
  * Initialize Express
@@ -52,7 +54,7 @@ const corsOptions = {
 app.options('/oauth/callback', cors(corsOptions)) // Enable pre-flight request
 router.get('/oauth/callback', cors(corsOptions), StripeController.stripeOauthCallback)
 router.post('/oauth/deauthorize', cors(corsOptions), StripeController.deauthorizeStripeAccount)
-router.get('/account', StripeController.getStripeAccount)
+router.get('/account/:id', StripeController.getStripeAccount)
 
 // Buy Offer
 const BuyController = require('./controllers/BuyController')
@@ -60,6 +62,11 @@ router.post('/buy', BuyController.create)
 router.get('/buy', BuyController.findAll)
 router.get('/buy/:id', BuyController.findOne)
 router.put('/buy/:id/cancel', BuyController.cancel)
+
+// Images
+const ImageController = require('./controllers/ImageController')
+router.post('/image', ImageController.create)
+router.get('/image/:id', ImageController.findOne)
 
 // Export the server middleware
 module.exports = {

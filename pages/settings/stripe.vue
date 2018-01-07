@@ -67,18 +67,14 @@ export default {
     if (isEmpty(store.state.stripe.account)) {
       store.commit('TOGGLE_SETTINGS_SPINNER')
 
-      return app.$axios.$get('/account', {
-        params: {
-          user: store.getters.userID
-        }
-      })
+      return app.$axios.$get(`/account/${store.getters.userID}`)
         .then(account => {
           store.commit('SET_STRIPE_ACCOUNT', account)
 
           return null
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.response)
           store.commit('SET_STRIPE_ACCOUNT', {})
         })
         .finally(() => {

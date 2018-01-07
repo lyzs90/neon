@@ -3,7 +3,7 @@
 
     <!-- Hero -->
     <section class="w-100">
-      <v-parallax :src="require('../assets/bg1.png')" height="600" jumbotron>
+      <v-parallax :src="require('~/assets/bg1.png')" height="600" jumbotron>
         <v-layout column justify-center align-center>
           <logo/>
           <h1 class="title grey--text text--darken-1">
@@ -79,7 +79,7 @@
 
     <!-- Hero 2 -->
     <section class="w-100">
-      <v-parallax :src="require('../assets/bg2.png')" height="550" jumbotron>
+      <v-parallax :src="require('~/assets/bg2.png')" height="550" jumbotron>
         <v-layout column align-center justify-center>
           <div class="headline grey--text text--darken-1 mb-3 text-xs-center">Ever wondered why it is so difficult to buy and sell Ether?</div>
           <em class="grey--text text--darken-1">It's not anymore</em>
