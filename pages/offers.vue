@@ -57,7 +57,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { isEmpty, some } from 'lodash'
-import blockies from 'ethereum-blockies'
 
 import { db } from '~/services/firebaseService'
 import OfferForm from '~/components/OfferForm'
@@ -74,7 +73,7 @@ export default {
       }
     })
       .then(imgData => {
-        callback(null, { serverBlockiesImg: imgData })
+        callback(null, { blockiesImg: imgData })
       })
       .catch(err => {
         console.log(err.response)
@@ -135,34 +134,6 @@ export default {
 
     noPendingOffers () {
       return isEmpty(this.offers.pending)
-    },
-
-    blockiesImg () {
-      // Note: on the client, we try to save blockies image in localStorage. On SSR, we will fetch from server
-      // TODO: move saving to mounted()
-      if (!this.$isServer && !this.serverBlockiesImg) {
-        const localImg = window.localStorage.getItem(`blockies:${this.userID}`)
-
-        // If blockies has been saved locally
-        if (localImg) {
-          return `data:image/png;base64,${localImg}`
-        }
-
-        // TODO: move creation to account creation and save to storage
-        // Else generate a new one
-        const canvas = blockies.create({
-          seed: this.userID,
-          size: 15,
-          scale: 20
-        })
-        const dataURL = canvas.toDataURL('image/png')
-        const imgData = dataURL.replace(/^data:image\/(png|jpg);base64,/, '')
-        localStorage.setItem(`blockies:${this.userID}`, imgData)
-
-        return dataURL
-      }
-
-      return this.serverBlockiesImg
     }
   },
 

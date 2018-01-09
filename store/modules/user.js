@@ -1,5 +1,8 @@
 import { auth } from '~/services/firebaseService'
 import { isEmpty } from 'lodash'
+import blockies from 'ethereum-blockies'
+import uuidv4 from 'uuid/v4'
+import Promise from 'bluebird'
 
 const state = {
   account: {}
@@ -35,6 +38,25 @@ const mutations = {
 const actions = {
   createUserWithEmailAndPassword ({ commit }, { email, password }) {
     return auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const user = auth.currentUser
+        const canvas = blockies.create({
+          seed: user.uid,
+          size: 15,
+          scale: 20
+        })
+        const image = canvas.toDataURL('image/png')
+        const imageID = uuidv4().replace(/-/g, '')
+
+        return Promise.all([
+          this.$axios.$post('/image', {
+            image,
+            id: imageID,
+            folder: 'blockies'
+          }),
+          user.updateProfile({ photoURL: imageID })
+        ])
+      })
       .then(() => {
         const userKey = Object.keys(window.localStorage)
           .filter(item => item.startsWith('firebase:authUser'))[0]
@@ -79,6 +101,7 @@ const actions = {
     return auth.signOut()
       .then(() => {
         commit('SET_USER', {})
+        this.app.router.push('/')
 
         return this.$axios.$get('/endUserSession')
       })
