@@ -13,31 +13,36 @@
       <!-- My Offers -->
       <v-checkbox label="View Completed" v-model="displayCompleted" light></v-checkbox>
 
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 v-for="offer in offers.pending" :key="offer.id">
         <v-card>
-          <v-card-media
-            class="white--text"
-            height="200px"
-            :src="blockiesImg"
-          >
-            <v-container fill-height fluid>
-              <v-layout fill-height>
-                <v-flex xs12 align-end flexbox>
-                  <span class="headline">{{ offers.pending[0] && offers.pending[0].offer_type }}</span>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-media>
-          <v-card-title>
+          <v-card-title primary-title class="row justify-center">
             <div>
-              <span class="grey--text">Number 10</span><br>
-              <span>Whitehaven Beach</span><br>
-              <span>Whitsunday Island, Whitsunday Islands</span>
+              <h6 class="title">{{ offer.id }}</h6>
             </div>
           </v-card-title>
-          <v-card-actions>
-            <v-btn flat color="orange">Share</v-btn>
-            <v-btn flat color="orange">Explore</v-btn>
+          <v-card-media height="200px">
+            <v-layout row align-center>
+              <!-- Offeror -->
+              <v-flex xs6 column align-center>
+                <v-avatar>
+                  <img :src="blockiesImg">
+                </v-avatar>
+                <div class="f6 pa-1 w-50 truncate">{{ offer.user_id }}</div>
+              </v-flex>
+
+              <!-- Offeree -->
+              <v-flex xs6 column align-center>
+                <v-avatar>
+                  <img :src="offer.offeree_photo">
+                </v-avatar>
+                <div class="f6 pa-1 w-50 truncate">{{ offer.offeree_id }}</div>
+              </v-flex>
+
+            </v-layout>
+          </v-card-media>
+          <v-card-actions class="row justify-center ma-3">
+            <v-btn class="white--text" color="green">Accept</v-btn>
+            <v-btn class="white--text" color="red">Reject</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -57,6 +62,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { isEmpty, some } from 'lodash'
+import Promise from 'bluebird'
 
 import { db } from '~/services/firebaseService'
 import OfferForm from '~/components/OfferForm'
@@ -98,7 +104,24 @@ export default {
               ...doc.data()
             })
           })
-          this.$store.commit('SET_PENDING_OFFERS', pendingOffers)
+          return Promise.map(pendingOffers, offer => {
+            return this.$axios.$get(`/user/${offer.offeree_id}`)
+              .then(offeree => {
+                return this.$axios.$get(`/image/${offeree.photoUrl}`, {
+                  params: {
+                    folder: 'blockies'
+                  }
+                })
+              })
+              .then(imgData => {
+                offer.offeree_photo = imgData
+
+                return offer
+              })
+          })
+            .then(populatedOffers => {
+              this.$store.commit('SET_PENDING_OFFERS', populatedOffers)
+            })
         })
 
       this.$store.commit('SET_LISTENER', {

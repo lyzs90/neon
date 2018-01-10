@@ -68,6 +68,11 @@ const ImageController = require('./controllers/ImageController')
 router.post('/image', ImageController.create)
 router.get('/image/:id', ImageController.findOne)
 
+// User
+const UserController = require('./controllers/UserController')
+router.post('/user', UserController.create)
+router.get('/user/:id', UserController.findOne)
+
 // Export the server middleware
 module.exports = {
   path: '/api',

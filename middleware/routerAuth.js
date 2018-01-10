@@ -30,7 +30,7 @@ export default function ({ store, redirect, route, app }) {
             const userKey = Object.keys(window.localStorage)
               .filter(item => item.startsWith('firebase:authUser'))[0]
             const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined
-            const expired = Date.now() > user.stsTokenManager.expirationTime
+            const expired = user && Date.now() > user.stsTokenManager.expirationTime
 
             if (user && !expired) {
               store.commit('SET_USER', user)

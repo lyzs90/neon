@@ -116,11 +116,12 @@ module.exports = {
         snapshot.forEach(doc => {
           result.push(doc.data())
         })
-        return result
+        const account = result[0]
+        return account
       })
       .then(({ stripe_user_id: accountID, access_token: accessToken }) => {
         // Makes request on behalf of connected account. Extra check to prevent root account details from being retrieved
-        if (_.isNil(accountID)) {
+        if (!_.isNil(accountID)) {
           const stripe = require('stripe')(process.env.STRIPE_SECRET)
           return stripe.accounts.retrieve(accountID)
         }

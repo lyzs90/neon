@@ -10,7 +10,7 @@
               <v-layout row justify-start align-center>
                 <router-link to="/" class="no-underline">
                   <v-avatar class="cyan ma-3">
-                    <span class="white--text headline small-caps">
+                    <span class="white--text headline">
                       {{ userInitials }}
                     </span>
                   </v-avatar>
@@ -39,7 +39,7 @@
           <v-layout row justify-start align-center>
             <v-flex xs4>
               <v-avatar @click="openNav" class="cyan cursor">
-                <span class="white--text headline small-caps">{{ userInitials }}</span>
+                <span class="white--text headline">{{ userInitials }}</span>
               </v-avatar>
             </v-flex>
             <v-flex xs8>

@@ -17,7 +17,7 @@ const getters = {
     if (state.account && state.account.email) {
       return state.account.email.substring(0, 1)
     }
-    return 'T'
+    return 'Ne'
   },
 
   userID: state => {
@@ -49,6 +49,12 @@ const actions = {
         const imageID = uuidv4().replace(/-/g, '')
 
         return Promise.all([
+          this.$axios.$post('/user', {
+            uid: user.uid,
+            photoUrl: imageID,
+            email: user.email,
+            phoneNumber: user.phoneNumber
+          }),
           this.$axios.$post('/image', {
             image,
             id: imageID,
