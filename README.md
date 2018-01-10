@@ -1,6 +1,6 @@
 # neon
 
-> The frontend
+> WIP: Hacky implementation of a fiat to crypto moneychanger
 
 ## Build Setup
 
