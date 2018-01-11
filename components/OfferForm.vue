@@ -166,7 +166,7 @@ export default {
 
       set: function (newValue) {
         this.tempTotalPrice = newValue
-        return newValue
+        return this.tempTotalPrice
       }
     }
   },

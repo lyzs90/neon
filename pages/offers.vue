@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid h-100 :class="{'ma-3': $vuetify.breakpoint.smAndUp}">
+  <v-container fluid h-100 :class="{'ma-3': $vuetify.breakpoint.smAndUp}" v-cloak>
     <v-layout column justify-start>
       <h2>My Offers</h2>
       <br />
@@ -13,39 +13,47 @@
       <!-- My Offers -->
       <v-checkbox label="View Completed" v-model="displayCompleted" light></v-checkbox>
 
-      <v-flex xs12 sm6 v-for="offer in offers.pending" :key="offer.id">
-        <v-card>
-          <v-card-title primary-title class="row justify-center">
-            <div>
-              <h6 class="title">{{ offer.id }}</h6>
-            </div>
-          </v-card-title>
-          <v-card-media height="200px">
-            <v-layout row align-center>
-              <!-- Offeror -->
-              <v-flex xs6 column align-center>
-                <v-avatar>
-                  <img :src="blockiesImg">
-                </v-avatar>
-                <div class="f6 pa-1 w-50 truncate">{{ offer.user_id }}</div>
-              </v-flex>
+      <v-container fluid :class="{'grid-list-xl': $vuetify.breakpoint.smAndUp}">
+        <v-layout row wrap>
 
-              <!-- Offeree -->
-              <v-flex xs6 column align-center>
-                <v-avatar>
-                  <img :src="offer.offeree_photo">
-                </v-avatar>
-                <div class="f6 pa-1 w-50 truncate">{{ offer.offeree_id }}</div>
-              </v-flex>
+          <v-flex xs12 sm3 v-for="offer in offers.pending" :key="offer.id">
+            <v-card class="w-100" :class="{'mb-3': $vuetify.breakpoint.xsOnly}">
+              <v-card-title primary-title class="row justify-center">
+                <div>
+                  <h5 class="headline">${{ formatPrice(offer.total_price) }}</h5>
+                  <div>{{ offer.quantity }} @ ${{  formatPrice(offer.unit_price) }}</div>
+                </div>
+              </v-card-title>
+              <v-card-media height="150px">
+                <br />
+                <v-layout class="offer__card__width" column justify-space-around>
+                  <!-- Offeror -->
+                  <v-flex xs10 offset-xs2 align-center>
+                    <v-avatar>
+                      <img :src="blockiesImg">
+                    </v-avatar>
+                    <div class="f6 pa-1 truncate">{{ offer.user_id }}</div>
+                  </v-flex>
 
-            </v-layout>
-          </v-card-media>
-          <v-card-actions class="row justify-center ma-3">
-            <v-btn class="white--text" color="green">Accept</v-btn>
-            <v-btn class="white--text" color="red">Reject</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
+                  <!-- Offeree -->
+                  <v-flex xs12 offset-xs2 align-center>
+                    <v-avatar :class="{'grey darken-3': !offer.offeree_photo}">
+                      <img :src="offer.offeree_photo">
+                    </v-avatar>
+                    <div class="f6 pa-1 truncate">{{ offer.offeree_id || 'Waiting for buyer/seller...' }}</div>
+                  </v-flex>
+                </v-layout>
+                <br />
+              </v-card-media>
+              <v-divider></v-divider>
+              <v-card-actions class="row justify-center ma-3">
+                <v-btn class="white--text" color="green">Accept</v-btn>
+                <v-btn class="white--text" color="red">Reject</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
 
     </v-layout>
 
@@ -61,7 +69,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { isEmpty, some } from 'lodash'
+import { isNil, isEmpty, some } from 'lodash'
 import Promise from 'bluebird'
 
 import { db } from '~/services/firebaseService'
@@ -105,6 +113,10 @@ export default {
             })
           })
           return Promise.map(pendingOffers, offer => {
+            if (isNil(offer.offeree_id)) {
+              return offer
+            }
+
             return this.$axios.$get(`/user/${offer.offeree_id}`)
               .then(offeree => {
                 return this.$axios.$get(`/image/${offeree.photoUrl}`, {
@@ -163,10 +175,19 @@ export default {
   methods: {
     toggleOfferModal () {
       this.displayOfferModal = !this.displayOfferModal
+    },
+
+    formatPrice (value) {
+      let val = (value / 1).toFixed(2)
+      return val.toString()
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+
+.offer__card__width
+  max-width: 280px
+
 </style>
