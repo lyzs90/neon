@@ -46,7 +46,7 @@ module.exports = {
       })
       .then(() => {
         winston.info(tag, `Oauth info saved to db`)
-        return res.redirect(process.env.BASE_URL)
+        return res.redirect(`${process.env.BASE_URL}/settings/stripe`)
       })
       .catch(err => {
         winston.error(tag, err)
@@ -105,7 +105,7 @@ module.exports = {
     const userID = req.params.id
 
     return Promise.try(() => {
-      return userID ? firestore.collection('accounts').where('user_id', '==', userID).get() : null
+      return firestore.collection('accounts').where('user_id', '==', userID).get()
     })
       .then(snapshot => {
         if (snapshot.empty) {

@@ -122,7 +122,7 @@ export default {
 
             return this.$axios.$get(`/user/${offer.offeree_id}`)
               .then(offeree => {
-                return this.$axios.$get(`/image/${offeree.photoUrl}`, {
+                return this.$axios.$get(`/image/${offeree.photoURL}`, {
                   params: {
                     folder: 'blockies'
                   }

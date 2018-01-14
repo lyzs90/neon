@@ -1,3 +1,6 @@
+import Promise from 'bluebird'
+import { isNull } from 'lodash'
+
 import { auth } from '~/services/firebaseService'
 
 // Plugins run every time the page is refreshed
@@ -32,18 +35,27 @@ export default function ({ store, $axios }) {
 
       if (user && !expired) {
         store.commit('SET_USER', user)
-        return $axios.$post('/persistUserSession', { user })
+        return Promise.all([
+          $axios.$get(`/user/${user.uid}`),
+          $axios.$post('/persistUserSession', { user })
+        ])
+      }
+
+      return null
+    })
+    .then(results => {
+      if (!isNull(results)) {
+        const userDetails = results[0]
+        store.commit('UPDATE_USER', userDetails)
+        return null
       }
 
       // Token expired. Treat user as unauthenticated
       store.commit('SET_USER', {})
       return auth.signOut()
     })
+    .catch({ message: 'BreakError' }, () => {})
     .catch(err => {
-      if (err.message === 'BreakError') {
-        return null
-      }
-
       console.log(err)
     })
 }

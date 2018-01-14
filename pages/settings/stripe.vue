@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { isEmpty } from 'lodash'
 
 export default {
@@ -85,8 +85,24 @@ export default {
     return null
   },
 
+  mounted () {
+    // After redirect from stripe, set user state as onboarded
+    if (!isEmpty(this.stripe.account) && !this.user.account.isOnboarded) {
+      this.updateUser({
+        isOnboarded: true
+      })
+        .then(() => {
+          this.showSnackbar({
+            color: 'success',
+            message: 'You are connected to Stripe!'
+          })
+        })
+    }
+  },
+
   computed: {
     ...mapState([
+      'user',
       'stripe',
       'buttonSpinner'
     ]),
@@ -99,8 +115,13 @@ export default {
   methods: {
     ...mapActions([
       'authorizeStripe',
-      'deauthorizeStripe'
-    ])
+      'deauthorizeStripe',
+      'updateUser'
+    ]),
+
+    ...mapMutations({
+      showSnackbar: 'SHOW_SNACKBAR'
+    })
   }
 }
 </script>

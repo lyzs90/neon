@@ -1,9 +1,20 @@
 <template>
-  <v-layout column justify-center align-center>
+  <v-layout column justify-center align-center v-cloak>
 
     <!-- Hero -->
     <section class="w-100">
       <v-parallax :src="require('~/assets/bg1.png')" height="600" jumbotron>
+
+        <!-- Onboarding Chip -->
+        <no-ssr>
+          <v-chip @click="setUpStripe" v-if="authenticated && !user.account.isOnboarded" class="chip__onboarding mt-3 self-end cursor" color="orange" text-color="white">
+            <v-avatar class="cursor">
+              <v-icon>account_circle</v-icon>
+            </v-avatar>
+            <span class="cursor">Set up Seller Account</span>
+          </v-chip>
+        </no-ssr>
+
         <v-layout column justify-center align-center>
           <logo/>
           <h1 class="title grey--text text--darken-1">
@@ -162,30 +173,51 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
+
 import Logo from '~/components/Logo.vue'
 
 export default {
   components: {
     Logo
+  },
+
+  computed: {
+    ...mapState([
+      'user'
+    ]),
+
+    ...mapGetters([
+      'authenticated'
+    ])
+  },
+
+  methods: {
+    setUpStripe () {
+      this.$router.push('/settings/stripe')
+    }
   }
 }
 </script>
 
-<style>
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+<style <style lang="stylus" scoped>
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
+.chip__onboarding
+  max-width: 200px
+
+.title
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;/* 1 */
+  display: block
+  font-weight: 300
+  font-size: 100px
+  color: #35495e
+  letter-spacing: 1px
+
+.subtitle
+  font-weight: 300
+  font-size: 42px
+  color: #526488
+  word-spacing: 5px
+  padding-bottom: 15px
+
 </style>

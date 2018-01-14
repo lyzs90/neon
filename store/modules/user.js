@@ -1,5 +1,5 @@
 import { auth } from '~/services/firebaseService'
-import { isEmpty } from 'lodash'
+import { isEmpty, each } from 'lodash'
 import blockies from 'ethereum-blockies'
 import uuidv4 from 'uuid/v4'
 import Promise from 'bluebird'
@@ -32,6 +32,12 @@ const getters = {
 const mutations = {
   SET_USER (state, payload) {
     state.account = payload
+  },
+
+  UPDATE_USER (state, payload) {
+    each(payload, (v, k) => {
+      state.account[k] = v
+    })
   }
 }
 
@@ -51,7 +57,7 @@ const actions = {
         return Promise.all([
           this.$axios.$post('/user', {
             uid: user.uid,
-            photoUrl: imageID,
+            photoURL: imageID,
             email: user.email,
             phoneNumber: user.phoneNumber
           }),
@@ -110,6 +116,13 @@ const actions = {
         this.app.router.push('/')
 
         return this.$axios.$get('/endUserSession')
+      })
+  },
+
+  updateUser ({ commit, getters }, payload) {
+    return this.$axios.$put(`/user/${getters.userID}`, payload)
+      .then(() => {
+        commit('UPDATE_USER', payload)
       })
   }
 }

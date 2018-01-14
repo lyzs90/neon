@@ -72,6 +72,7 @@ router.get('/image/:id', ImageController.findOne)
 const UserController = require('./controllers/UserController')
 router.post('/user', UserController.create)
 router.get('/user/:id', UserController.findOne)
+router.put('/user/:id', UserController.update)
 
 // Export the server middleware
 module.exports = {

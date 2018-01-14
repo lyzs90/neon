@@ -113,7 +113,7 @@ export default {
       // Total Price
       totalPrice: '0.00',
       currencyRules: [
-        (v) => !!v || 'Price is required',
+        (v) => !!parseFloat(v) || 'Price is required',
         (v) => /^\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'
       ],
 

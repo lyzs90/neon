@@ -1,3 +1,6 @@
+import Promise from 'bluebird'
+import { isNull } from 'lodash'
+
 import { auth } from '~/services/firebaseService'
 
 /**
@@ -22,7 +25,7 @@ export default function ({ store, redirect, route, app }) {
       return app.$axios.$get('/validateAuthSession')
         .then(hasSession => {
           if (hasSession) {
-            return null
+            throw new Error('BreakError')
           }
 
           if (process.browser) {
@@ -34,8 +37,21 @@ export default function ({ store, redirect, route, app }) {
 
             if (user && !expired) {
               store.commit('SET_USER', user)
-              return app.$axios.$post('/persistUserSession', { user })
+              return Promise.all([
+                app.$axios.$get(`/user/${user.uid}`),
+                app.$axios.$post('/persistUserSession', { user })
+              ])
             }
+          }
+
+          return null
+        })
+        .then(results => {
+          console.log(results)
+          if (!isNull(results)) {
+            const userDetails = results[0]
+            store.commit('UPDATE_USER', userDetails)
+            return null
           }
 
           store.commit('SET_USER', {})
@@ -47,6 +63,10 @@ export default function ({ store, redirect, route, app }) {
             .then(() => {
               return redirect('/')
             })
+        })
+        .catch({ message: 'BreakError' }, () => {})
+        .catch(err => {
+          console.log(err)
         })
   }
 }
