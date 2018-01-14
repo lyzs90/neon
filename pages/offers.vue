@@ -20,8 +20,9 @@
             <v-card class="w-100" :class="{'mb-3': $vuetify.breakpoint.xsOnly}">
               <v-card-title primary-title class="row justify-center">
                 <div>
-                  <h5 class="headline">${{ formatPrice(offer.total_price) }}</h5>
-                  <div>{{ offer.quantity }} @ ${{  formatPrice(offer.unit_price) }}</div>
+                  <h5 class="headline">{{ offer.offer_type }}</h5>
+                  <div>{{ offer.quantity }} units</div>
+                  <div>${{  formatPrice(offer.unit_price) }}</div>
                 </div>
               </v-card-title>
               <v-card-media height="150px">
@@ -81,6 +82,7 @@ export default {
   },
 
   asyncData ({ app, store }, callback) {
+    store.commit('TOGGLE_MAIN_SPINNER')
     return app.$axios.$get(`/image/${store.getters.userImage}`, {
       params: {
         folder: 'blockies'
@@ -92,14 +94,15 @@ export default {
       .catch(err => {
         console.log(err.response)
       })
+      .finally(() => {
+        store.commit('TOGGLE_MAIN_SPINNER')
+      })
   },
 
   created () {
-    this.$store.commit('TOGGLE_MAIN_SPINNER')
-
     // Set up listener if it doesnt already exist
-    if (!this.$isServer && !some(this.listeners, { name: 'user_buy_offers' })) {
-      const unsubscribe = db.collection('buy_offers')
+    if (!this.$isServer && !some(this.listeners, { name: 'user_offers' })) {
+      const unsubscribe = db.collection('offers')
         .where('user_id', '==', this.$store.getters.userID)
         .onSnapshot(querySnapshot => {
           // TODO: when writing, 'server' means changes have been propogated to db. local means changes are still local. can implement a spinner
@@ -138,16 +141,14 @@ export default {
 
       this.$store.commit('SET_LISTENER', {
         unsubscribe,
-        name: 'user_buy_offers'
+        name: 'user_offers'
       })
     }
-
-    this.$store.commit('TOGGLE_MAIN_SPINNER')
   },
 
   beforeDestroy () {
-    this.listeners['user_buy_offers'].unsubscribe()
-    this.$store.commit('REMOVE_LISTENER', 'user_buy_offers')
+    this.listeners['user_offers'].unsubscribe()
+    this.$store.commit('REMOVE_LISTENER', 'user_offers')
   },
 
   data () {

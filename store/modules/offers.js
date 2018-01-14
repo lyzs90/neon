@@ -36,7 +36,7 @@ const actions = {
 
     switch (offerType) {
       case 'Buy Ether':
-        return this.$axios.$post('/buy', payload)
+        return this.$axios.$post('/offer', payload)
           .then(() => {
             commit('SHOW_SNACKBAR', {
               color: 'success',
@@ -56,7 +56,7 @@ const actions = {
             commit('TOGGLE_BUTTON_SPINNER')
           })
       case 'Sell Ether':
-        return this.$axios.$post('/sell', payload)
+        return this.$axios.$post('/offer', payload)
           .then(() => {
             commit('SHOW_SNACKBAR', {
               color: 'success',

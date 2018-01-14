@@ -5,10 +5,11 @@ const _ = require('lodash')
 
 module.exports = {
   /**
-   * @api {POST} /api/buy
-   * @apiDescription Create an offer to buy Ether
+   * @api {POST} /api/offer
+   * @apiDescription Create an offer
    *
    * @apiParam (body)  {String}  user_id        ID of offeror
+   * @apiParam (body)  {String}  offer_type     Type of offer
    * @apiParam (body)  {String}  [offeree_id]   ID of offeree
    * @apiParam (body)  {Number}  quantity       Quantity to purchase
    * @apiParam (body)  {Number}  unit_price     Price per unit
@@ -18,15 +19,15 @@ module.exports = {
    * @apiSuccess (201) - Offer created
    */
   create: (req, res) => {
-    const tag = `${req.uid} BuyController.create:`
+    const tag = `${req.uid} OfferController.create:`
 
     _.extend(req.body, {
       status: 'pending'
     })
 
-    return firestore.collection('buy_offers').doc().set(req.body)
+    return firestore.collection('offers').doc().set(req.body)
       .then(() => {
-        winston.info(tag, `Buy offer created`)
+        winston.info(tag, `Offer created`)
         return res.status(201).end()
       })
       .catch(err => {
@@ -36,19 +37,19 @@ module.exports = {
   },
 
   /**
-   * @api {GET} /api/buy
-   * @apiDescription Get all active buy offers
+   * @api {GET} /api/offer
+   * @apiDescription Get all active offers
    *
    * @apiParam (query) {String}  user         ID of user to filter on
    *
-   * @apiSuccess (200) {Object[]}   Array of buy offers created by the user
+   * @apiSuccess (200) {Object[]}   Array of offers created by the user
    */
   findAll: (req, res) => {
-    const tag = `${req.uid} BuyController.findAll:`
+    const tag = `${req.uid} OfferController.findAll:`
     const userID = req.query.user
 
     return Promise.try(() => {
-      return userID ? firestore.collection('buy_offers').where('user_id', '==', userID).get() : null
+      return userID ? firestore.collection('offers').where('user_id', '==', userID).get() : null
     })
       .then(snapshot => {
         if (snapshot.empty) {
@@ -71,24 +72,24 @@ module.exports = {
   },
 
   /**
-   * @api {GET} /api/buy/:id
-   * @apiDescription Get one buy offer
+   * @api {GET} /api/offer/:id
+   * @apiDescription Get one offer
    *
    * @apiParam (param) {String}  id             ID of transaction
    */
   findOne: (req, res) => {
-    const tag = `${req.uid} BuyController.findOne:`
+    const tag = `${req.uid} OfferController.findOne:`
     const { id } = req.params
   },
 
   /**
-   * @api {PUT} /api/buy/:id/cancel
-   * @apiDescription Cancel a buy offer
+   * @api {PUT} /api/offer/:id/cancel
+   * @apiDescription Cancel an offer
    *
    * @apiParam (param) {String}  id             ID of transaction
    */
   cancel: (req, res) => {
-    const tag = `${req.uid} BuyController.cancel:`
+    const tag = `${req.uid} OfferController.cancel:`
     const { id } = req.params
   },
 }

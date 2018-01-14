@@ -56,12 +56,12 @@ router.get('/oauth/callback', cors(corsOptions), StripeController.stripeOauthCal
 router.post('/oauth/deauthorize', cors(corsOptions), StripeController.deauthorizeStripeAccount)
 router.get('/account/:id', StripeController.getStripeAccount)
 
-// Buy Offer
-const BuyController = require('./controllers/BuyController')
-router.post('/buy', BuyController.create)
-router.get('/buy', BuyController.findAll)
-router.get('/buy/:id', BuyController.findOne)
-router.put('/buy/:id/cancel', BuyController.cancel)
+// Offers
+const OfferController = require('./controllers/OfferController')
+router.post('/offer', OfferController.create)
+router.get('/offer', OfferController.findAll)
+router.get('/offer/:id', OfferController.findOne)
+router.put('/offer/:id/cancel', OfferController.cancel)
 
 // Images
 const ImageController = require('./controllers/ImageController')

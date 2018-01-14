@@ -1,99 +1,94 @@
 <template>
   <v-card class="w-100">
-    <v-toolbar color="grey lighten-1" dark>
 
-      <!-- Offer Type -->
-      <v-toolbar-title>
-        <v-menu offset-y>
-          <v-btn color="secondary" dark slot="activator">{{ offerSelect }}</v-btn>
-          <v-list>
-            <v-list-tile v-for="item in offerItems" :key="item.title" @click="selectOfferOption(item)">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <!-- Market Price -->
-      <v-tooltip top>
-        <v-badge slot="activator" color="secondary" class="mr-4">
-          <span slot="badge">!</span>
-          <span class="pa-1">S${{ marketPrice }}</span>
-        </v-badge>
-        <span>Average market price</span>
-      </v-tooltip>
+    <v-toolbar color="blue lighten-1" dark>
+      <v-toolbar-title>Make Offer</v-toolbar-title>
     </v-toolbar>
 
-    <v-form v-model="valid" ref="form" class="pa-3">
+    <v-stepper vertical v-model="step">
 
-      <!-- Offeree ID -->
-      <v-layout row justify-start align-baseline>
-        <v-text-field
-          label="User ID (optional)"
-          v-model="offereeID"
-          hint="Send a private offer to someone you know"
-        ></v-text-field>
-      </v-layout>
+      <!-- Step 1 -->
+      <v-stepper-step step="1" :complete="step > 1">Details</v-stepper-step>
+      <v-stepper-content step="1">
+        <v-form v-model="valid" ref="form" class="pa-3">
+          <!-- Offer Type -->
+          <v-layout row justify-space-between align-baseline>
+            <v-menu offset-y>
+              <v-btn color="grey darken-1" dark slot="activator">{{ offerSelect }}</v-btn>
+              <v-list>
+                <v-list-tile v-for="item in offerItems" :key="item.title" @click="selectOfferOption(item)">
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
 
-      <!-- Units -->
-      <v-layout row justify-start align-baseline>
-        <v-btn color="grey darken-1" class="white--text btn__offer" @click.native="setMaxQuantity">Max</v-btn>
-        <v-text-field
-          label="Quantity"
-          v-model="units"
-          :rules="quantityRules"
-          required
-        ></v-text-field>
-      </v-layout>
+            <!-- Market Price -->
+            <v-tooltip top>
+              <v-badge slot="activator" color="secondary" class="mr-4">
+                <span slot="badge">!</span>
+                <span class="pa-1">S${{ marketPrice }}</span>
+              </v-badge>
+              <span>Average market price</span>
+            </v-tooltip>
+          </v-layout>
 
-      <!-- Unit Price -->
-      <v-layout row justify-start align-baseline>
-        <v-menu offset-y>
-          <v-btn color="grey darken-1" class="btn__offer" dark slot="activator">{{ priceSelect }}</v-btn>
-          <v-list>
-            <v-list-tile v-for="item in priceItems" :key="item.title" @click="selectPriceOption(item)">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-        <v-text-field
-          label="Unit Price (S$)"
-          v-model="unitPrice"
-          :rules="currencyRules"
-          required
-        ></v-text-field>
-      </v-layout>
+          <!-- Total Price -->
+          <v-layout row justify-start align-baseline>
+            <v-text-field
+              label="S$"
+              v-model="totalPrice"
+              max="10"
+              :rules="currencyRules"
+              required
+            ></v-text-field>
+          </v-layout>
 
-      <!-- Duration -->
-      <v-layout row justify-start align-baseline>
-        <v-btn color="grey darken-1" class="white--text btn__offer" @click.native="setMaxDuration">Max</v-btn>
-        <v-text-field
-          label="Duration (min)"
-          v-model="duration"
-          :rules="durationRules"
-          required
-        ></v-text-field>
-      </v-layout>
+          <!-- Duration -->
+          <v-layout row justify-start align-baseline>
+            <v-text-field
+              label="Duration (min)"
+              v-model="duration"
+              :rules="durationRules"
+              required
+            ></v-text-field>
+            <v-btn color="grey darken-1" class="white--text btn__offer ma-3" @click.native="setMaxDuration">Max</v-btn>
+          </v-layout>
 
-      <!-- Total Price -->
-      <v-layout row justify-start align-baseline>
-        <v-btn disabled outline class="btn__offer not-allowed">Total</v-btn>
-        <v-text-field
-          label="S$"
-          v-model="totalPrice"
-          max="10"
-          :rules="currencyRules"
-          required
-        ></v-text-field>
-      </v-layout>
+          <!-- Offeree ID -->
+          <v-layout row justify-start align-baseline>
+            <v-text-field
+              label="User ID (optional)"
+              v-model="offereeID"
+              hint="Send a private offer to someone you know"
+            ></v-text-field>
+          </v-layout>
 
-      <v-btn class="right ma-3 btn__offer" color="primary" @click.native="submit" :disabled="!valid">
-        {{ buttonSpinner.display ? '' : 'Submit' }}
-        <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
-      </v-btn>
-    </v-form>
+          <v-btn class="right ma-3 btn__offer" color="secondary" @click.native="step = 2" :disabled="!valid">Next</v-btn>
+        </v-form>
+      </v-stepper-content>
+
+      <!-- Step 2 -->
+      <v-stepper-step step="2" :complete="step > 2">Confirmation</v-stepper-step>
+      <v-stepper-content step="2">
+        <v-layout column justify-center align-start>
+          <span>Type: {{  offerSelect }}</span>
+          <span>Total Price: S${{ totalPrice }}</span>
+          <span>Units: {{ units }}</span>
+          <span>Duration: {{ duration }}</span>
+          <span>Offered To: {{ offereeID || 'Everyone' }}</span>
+        </v-layout>
+
+        <v-layout row justify-end align-baseline>
+          <v-btn class="right ma-3 btn__offer" color="secondary" @click.native="step = 1">Back</v-btn>
+          <v-btn class="right ma-3 btn__offer" color="primary" @click.native="submit" :disabled="!valid">
+            {{ buttonSpinner.display ? '' : 'Submit' }}
+            <v-progress-circular v-if="buttonSpinner.display" indeterminate color="white" size="25"></v-progress-circular>
+          </v-btn>
+        </v-layout>
+      </v-stepper-content>
+
+    </v-stepper>
+
   </v-card>
 </template>
 
@@ -104,11 +99,9 @@ import { extend } from 'lodash'
 export default {
   data () {
     return {
+      step: 0,
       valid: false,
       marketPrice: 698,
-
-      // Offeree ID
-      offereeID: '',
 
       // Offer Type
       offerItems: [
@@ -117,24 +110,11 @@ export default {
       ],
       offerSelect: 'Buy Ether',
 
-      // Quantity
-      units: '0.0000000000',
-      quantityRules: [
-        (v) => !!v || 'No. of units is required',
-        (v) => /^\d+(\.\d{1,10})?$/.test(v) || 'No. of units must be valid'
-      ],
-
-      // Unit Price
-      priceSelect: 'Price',
-      priceItems: [
-        { title: 'Last' },
-        { title: 'Bid' },
-        { title: 'Ask' }
-      ],
-      unitPrice: '0.0000000000',
+      // Total Price
+      totalPrice: '0.00',
       currencyRules: [
         (v) => !!v || 'Price is required',
-        (v) => /^\d+(\.\d{1,10})?$/.test(v) || 'Price must be valid'
+        (v) => /^\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'
       ],
 
       // Time in Force
@@ -146,7 +126,8 @@ export default {
         (v) => v >= 30 || 'Min duration is 30min'
       ],
 
-      tempTotalPrice: 0
+      // Offeree ID
+      offereeID: ''
     }
   },
 
@@ -155,57 +136,22 @@ export default {
       'buttonSpinner'
     ]),
 
-    totalPrice: {
-      get: function () {
-        if (parseInt(this.units) === 0 || parseInt(this.unitPrice) === 0) {
-          return '0.0000000000'
-        }
-
-        return Math.round(this.units * this.unitPrice * 10000000000) / 10000000000
-      },
-
-      set: function (newValue) {
-        this.tempTotalPrice = newValue
-        return this.tempTotalPrice
-      }
+    units () {
+      return this.totalPrice / this.marketPrice
     }
   },
 
   methods: {
     ...mapActions({
-      emailLogin: 'signInWithEmail',
       createOffer: 'createOffer'
     }),
 
     ...mapMutations({
-      showSnackbar: 'SHOW_SNACKBAR',
       setPendingOffer: 'SET_PENDING_OFFER'
     }),
 
     selectOfferOption (item) {
       this.offerSelect = item.title
-    },
-
-    selectPriceOption (item) {
-      switch (item.title) {
-        case 'Last':
-          this.unitPrice = this.marketPrice
-          break
-
-        case 'Bid':
-          this.unitPrice = this.marketPrice - 5
-          break
-
-        case 'Ask':
-          this.unitPrice = this.marketPrice + 5
-          break
-      }
-
-      this.priceSelect = item.title
-    },
-
-    setMaxQuantity () {
-      this.units = Math.round(this.tempTotalPrice / this.unitPrice * 10000000000) / 10000000000
     },
 
     setMaxDuration () {
@@ -217,7 +163,7 @@ export default {
         const payload = {
           offer_type: this.offerSelect,
           quantity: this.units,
-          unit_price: this.unitPrice,
+          unit_price: this.marketPrice,
           duration: this.duration,
           total_price: this.totalPrice
         }
@@ -228,6 +174,8 @@ export default {
 
         return this.createOffer(payload)
           .then(() => {
+            this.$refs.form.reset()
+            this.step = 0
             this.$emit('close')
           })
       }
@@ -239,4 +187,5 @@ export default {
 <style lang="stylus" scoped>
 .btn__offer
   width: 105px
+  max-height: 36px
 </style>

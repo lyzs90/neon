@@ -104,8 +104,6 @@ export default {
       displaySignupModal: false,
       items: [
         { icon: 'home', title: 'Home', subtitle: '', link: '/', showSmAndUp: false, authenticated: false },
-        { icon: 'add_circle_outline', title: 'Buy', subtitle: '', link: '/buy', showSmAndUp: true, authenticated: true },
-        { icon: 'remove_circle_outline', title: 'Sell', subtitle: '', link: '/sell', showSmAndUp: true, authenticated: true },
         { icon: 'account_balance', title: 'My Offers', subtitle: '', link: '/offers', showSmAndUp: true, authenticated: true },
         { icon: 'help', title: 'FAQ', subtitle: '', link: '/faq', showSmAndUp: false, authenticated: false },
         { icon: 'settings', title: 'Settings', subtitle: '', link: '/settings/profile', showSmAndUp: true, authenticated: true }
